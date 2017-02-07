@@ -1,0 +1,6 @@
+﻿Options +Indexes
+IndexOptions Charset=UTF-8
+IndexOptions +FancyIndexing
+IndexIgnore *.md
+IndexIgnore .git
+IndexIgnore ..

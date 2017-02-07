@@ -1,10 +1,10 @@
-Etymological dictionary and a basic translator
+ÔªøEtymological dictionary and a basic translator
 ==============================================
 Project purpose
 ---------------
 The aim of this project is to create a website with a simple translator where
 you can search a word for its etymology. This website will then be presented as
-my Maturita project at Gymn·zium Nad ¡lejÌ. Maturita is the final exam at the
+my Maturita project at Gymn√°zium Nad √Ålej√≠. Maturita is the final exam at the
 end of highschool in Czechia.
 
 Planned Features
@@ -20,7 +20,7 @@ Ownership
 Because this is a school project, the school is the owner.
 
 
-Author: VojtÏch Tollar
+Author: Vojtƒõch Tollar
 
 
 
