@@ -46,7 +46,7 @@ function checkGET($attr) {
     else return '';    
 }
 
-function createLangList ($num) {
+function createLangList($num) {
     global $linguis;
     $name = 'lang'.$num;
     print "<select name='$name'>";
@@ -57,6 +57,21 @@ function createLangList ($num) {
         print "<option value='$l_value'>".$l."</option>";
     }
     print "</select>";
+}
+
+function createCheckboxField($root, $data) {
+    print "<td><input type='checkbox' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root').item(c).checked = this.checked\">Vše</td>";
+    for ($i = 2; $i != count($data) + 2; $i++) {
+        $ch = $root.($i-2);
+        if(isset($_GET[$ch])) {$ch = 'checked';}
+        else $ch = '';
+        print "<td><input class='$root' type='checkbox' name='$root".($i-2)."' $ch>".$data[$i-2]."</td>";
+        if ($i % 4 == 0) {
+            print "\r\n</tr>\n\t<tr>\r\n";
+        }
+    }            
+    
+    
 }
 ?>
 
@@ -84,30 +99,16 @@ function createLangList ($num) {
         <th colspan="4">Rozsah hledání</th>
     </tr>
     <tr>
-        <td><input type="checkbox" onclick="for(c in document.getElementsByClassName('rng')) document.getElementsByClassName('rng').item(c).checked = this.checked">Vše</td>
         <?php
-        for ($i = 2; $i != count($data1) + 2; $i++) {
-            $ch = checkGET('rng'.($i-2));
-            print "<td><input class='rng' type='checkbox' name='rng".($i-2)."' $ch>".$data1[$i-2]."</td>";
-            if ($i % 4 == 0) {
-                print "\r\n</tr>\n\t<tr>\r\n";
-            }
-        }            
+        createCheckboxField("rng", $data1);           
         ?>
     </tr>
     <tr class="main">
         <th colspan="4">Kategorie</th>
     </tr>
     <tr>
-        <td><input type="checkbox" onclick="for(c in document.getElementsByClassName('cat')) document.getElementsByClassName('cat').item(c).checked = this.checked">Vše</td>
         <?php
-        for ($i = 2; $i != count($data2) + 2; $i++) {
-            $ch = checkGET('cat'.($i-2));
-            print "<td><input class='cat'type='checkbox' name='cat".($i-2)."' $ch>".$data2[$i-2]."</td>";
-            if ($i % 4 == 0) {
-                print "\r\n</tr>\r<tr>\r\n";
-            }
-        }            
+        createCheckboxField("cat", $data2);    
         ?>
     </tr>
 </table>
