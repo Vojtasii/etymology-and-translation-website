@@ -3,35 +3,7 @@
 
 <head>
 <META HTTP-EQUIV="Content-type" content='text/html; charset=UTF-8' />
-<style>
-table {
-    font-family: sans-serif;
-    border-collapse: collapse;
-    text-align: center;
-    table-layout: fixed;
-    width: 800px;
-}
-
-th, td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
-tr.main {
-    background-color: #dddddd;
-}
-
-select {
-    min-width: 170px;
-    min-height: 45px;
-}
-
-th.target {
-    border-width: 3px;
-    border-color: rgb(150,150,150);
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -61,17 +33,15 @@ function createLangList($num) {
 
 function createCheckboxField($root, $data) {
     print "<td><input type='checkbox' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root').item(c).checked = this.checked\">Vše</td>";
-    for ($i = 2; $i != count($data) + 2; $i++) {
-        $ch = $root.($i-2);
+    for ($i = 0; $i != count($data); $i++) {
+        $ch = $root.$i;
         if(isset($_GET[$ch])) {$ch = 'checked';}
         else $ch = '';
-        print "<td><input class='$root' type='checkbox' name='$root".($i-2)."' $ch>".$data[$i-2]."</td>";
-        if ($i % 4 == 0) {
+        print "<td><input class='$root' type='checkbox' name='$root".$i."' $ch>".$data[$i]."</td>";
+        if (($i + 2) % 4 == 0) {
             print "\r\n</tr>\n\t<tr>\r\n";
         }
-    }            
-    
-    
+    }                
 }
 ?>
 
@@ -79,40 +49,22 @@ function createCheckboxField($root, $data) {
 <form method="get" id="srchform" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <table>
     <tr class="main">
-        <th class='target'>
-        <?php createLangList(0); ?>
-        </th>
-        <th>
-        <?php createLangList(1); ?>      
-        </th>
+        <th class='target'><?php createLangList(0); ?></th>
+        <th><?php createLangList(1); ?></th>
     </tr>
     <tr class="main">
         <?php
-        $p = "Zde napište hledaný termín"; 
+        $p = ""; 
         if(isset($_GET['keywords'])) {$p = $_GET['keywords'];}
-        echo "<th colspan='4' rowspan='3'><textarea name='keywords' cols='100' rows='8' form='srchform'>$p</textarea></th>";
+        echo "<th colspan='4' rowspan='1'><textarea name='keywords' cols='108' rows='8' form='srchform'>$p</textarea></th>";
         ?>
     </tr>
-    <tr></tr>
-    <tr></tr>
-    <tr class="main">
-        <th colspan="4">Rozsah hledání</th>
-    </tr>
-    <tr>
-        <?php
-        createCheckboxField("rng", $data1);           
-        ?>
-    </tr>
-    <tr class="main">
-        <th colspan="4">Kategorie</th>
-    </tr>
-    <tr>
-        <?php
-        createCheckboxField("cat", $data2);    
-        ?>
-    </tr>
+    <tr class="main"><th colspan="4"><input class="submit" type="submit"></th></tr>
+    <tr class="main"><th colspan="4">Rozsah hledání</th></tr>
+    <tr><?php createCheckboxField("rng", $data1); ?></tr>
+    <tr class="main"><th colspan="4">Kategorie</th></tr>
+    <tr><?php createCheckboxField("cat", $data2); ?></tr>
 </table>
-<input type="submit">
 </form>
 
 </body>
