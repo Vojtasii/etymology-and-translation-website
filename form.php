@@ -3,40 +3,21 @@
 <head>
 <meta http-equiv="Content-type" content='text/html; charset=UTF-8' />
 <link rel="stylesheet" href="style.css">
+<script src=jquery-3.1.1.js></script>
+<script src=URI.js></script>
 </head>
 <body>
 <script type=text/javascript>
-function changeUrl (action, element) {
+function changeUrl (action, element) { //URI.js is required
+    var uri = new URI(location.href);
     switch (action) {
-        case "add": addParameter("lang" + element); break;
-        case "rem": element--; remParameter("lang" + element); break;
+        case "add": uri.addSearch(element); break;
+        case "rem": uri.removeSearch(element); break;
+        case "set":
+            var value = document.getElementById("targetslct").value;
+            uri.setSearch(element, value);
     }
-}
-
-function addParameter(element) {
-    var loc = location.href;
-    loc += loc.indexOf("?") === -1 ? "?" : "&";
-    location.href = loc + element + "=";
-}
-function remParameter(element) {           //credit to bobince at StackOverflow
-    var url = location.href;
-    var urlparts= url.split('?');
-    if (urlparts.length>=2) {
-
-        var prefix= encodeURIComponent(element)+'=';
-        var pars= urlparts[1].split(/[&;]/g);
-
-        for (var i= pars.length; i-- > 0;) {
-            if (pars[i].lastIndexOf(prefix, 0) !== -1) {
-                pars.splice(i, 1);
-            }
-        }
-
-        url= urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : "");
-        location.href = url;
-    } else {
-        location.href = url;
-    }
+    location.href = uri;
 }
 </script>
 <?php
@@ -56,8 +37,8 @@ class LangOptions {
     }
     
     public function create() {
-        $select = "<th class='target'>";  
-        $select .= $this->createLangSelect(isset($_GET[$this->name]));
+        $select = "<th>";
+        $select .= $this->createLangSelect(isset($_GET[$this->name]), true);
         $select .= "</th>";
         $this->output[] = $select;
         $this->nextlang();
@@ -68,7 +49,9 @@ class LangOptions {
                 $select .= "</tr>\n<tr class='main'>";
             }
             if (isset($_GET[$this->name])) {
-                $select .= $this->addLangSelect();
+                $select .= "<th>";
+                $select .= $this->createLangSelect(true, false);
+                $select .= "</th>";
                 $this->output[] = $select;
                 $this->nextlang();    
             }
@@ -76,14 +59,14 @@ class LangOptions {
                 $select .= "<th>";
                 switch ($this->num) {
                     case 1:
-                        $select .= $this->addButton("button plus", "add", "+", $this->num);
+                        $select .= $this->addButton("button plus", "add", "+", "lang".$this->num);
                         break;
                     case count($this->loclang):
-                        $select .= $this->addButton("button minus", "rem", "-", $this->num);
+                        $select .= $this->addButton("button minus", "rem", "-", "lang".($this->num-1));
                         break;
                     default:
-                        $select .= $this->addButton("button minus", "rem", "-", $this->num);
-                        $select .= $this->addButton("button plus", "add", "+", $this->num);
+                        $select .= $this->addButton("button minus", "rem", "-", "lang".($this->num-1));
+                        $select .= $this->addButton("button plus", "add", "+", "lang".$this->num);
                 }
                 $select .= "</th>";
                 $this->output[] = $select;
@@ -98,28 +81,24 @@ class LangOptions {
         }        
     }
     
-    private function addButton($class, $id, $text, $num) {
-        return "<button class='$class' type='button' id='$id' onclick='changeUrl(\"$id\", $num)'>$text</button>";
+    private function addButton($class, $id, $text, $name) {
+        return "<button class='$class' type='button' id='$id' onclick='changeUrl(\"$id\", \"$name\")'>$text</button>";
     }
     
-    private function addLangSelect() {
+    private function createLangSelect($isset, $istarget) {
+        $langorder = $this->loclang;
         $select = '';
-        $select .= "<th>";
-        $select .= $this->createLangSelect(true);
-        $select .= "</th>";
-        return $select;
-    }   
-    
-    private function createLangSelect($isset) {
-        $select = '';
-        $select .= "<select name='$this->name'>";
+        if ($istarget) {
+            $select .= "<select class='target' name='$this->name' id='targetslct' onchange='changeUrl(\"set\",\"lang0\")'>";
+        }
+        else $select .= "<select name='$this->name'>";
         if ($isset) {
-            $getlang = array_search($_GET[$this->name], $this->loclang);
+            $getlang = array_search($_GET[$this->name], $langorder);
             if($getlang != null) {
-                $this->loclang = array($getlang => $_GET[$this->name]) + $this->loclang;
+                $langorder = array($getlang => $_GET[$this->name]) + $langorder;
             }
         }
-        foreach ($this->loclang as $l => $l_value) {
+        foreach ($langorder as $l => $l_value) {
             $select .= "<option value='$l_value'>".$l."</option>";
         }
         $select .= "</select>";
@@ -130,11 +109,6 @@ class LangOptions {
         $this->num++;
         $this->name = 'lang'.$this->num;
     }        
-}
-
-function checkGET($attr) {
-    if(isset($_GET[$attr])) {return 'checked';}
-    else return '';    
 }
 
 function createCheckboxField($root, $data) {
@@ -163,7 +137,6 @@ function createCheckboxField($root, $data) {
         $langs->push(); 
         ?>
     </tr>
-    <tr class="main"></tr>
     <tr class="main">
         <?php
         $p = ""; 

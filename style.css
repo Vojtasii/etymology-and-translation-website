@@ -41,7 +41,7 @@ th, td {
 tr.main {
     background-color: #dddddd;
 }
-th.target {
+select.target {
     border-width: 3px;
     border-color: rgb(150,150,150);
 }
