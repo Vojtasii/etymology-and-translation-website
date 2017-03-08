@@ -22,9 +22,25 @@ function changeUrl (action, element) { //URI.js is required
 </script>
 <?php
 header('charset=UTF-8');
+
 $linguis = array("Čeština" => "cs", "Français" => "fr", "Lietuvių" => "lt", "English" => "en", "Slovenčina" => "sk", "Slovenščina" => "sl");
-$data1 = array("Slovo", "Etymologie", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Lorem", "Dolor");
-$data2 = array("Věci", "Lidé", "Příroda", "Krajina", "Jídlo", "Domácnost", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Amen");
+$cs = array(array("Slovo", "Etymologie"), array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior"));
+$fr = array(array("Mot", "Etymologie"), array("Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum"));
+$lt = array(array("Žodis", "Etymologija"), array("Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam"));
+$en = array(array("Word", "Etymology"), array("Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor"));
+$sk = array(array("Slovo", "Etymológia"), array("Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit"));
+$sl = array(array("Beseda", "Etymologija"), array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet"));
+$tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl);
+if(isset($_GET['lang0']) && array_key_exists($_GET['lang0'], $tempdata)) {
+    $langdata = $tempdata[$_GET['lang0']];
+    $data1 = $langdata[0];
+    $data2 = $langdata[1];
+}
+else {
+    $langdata = $tempdata["cs"];
+    $data1 = $langdata[0];
+    $data2 = $langdata[1];
+}
 
 class LangOptions {
     private $loclang;

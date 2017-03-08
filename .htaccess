@@ -4,3 +4,5 @@ IndexOptions +FancyIndexing
 IndexIgnore *.md
 IndexIgnore .git
 IndexIgnore ..
+IndexIgnore URI.js
+IndexIgnore jquery*
