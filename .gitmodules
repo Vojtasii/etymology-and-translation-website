@@ -1,0 +1,3 @@
+[submodule "URI.js"]
+	path = URI.js
+	url = https://github.com/medialize/URI.js

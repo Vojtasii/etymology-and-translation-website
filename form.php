@@ -3,8 +3,8 @@
 <head>
 <meta http-equiv="Content-type" content='text/html; charset=UTF-8' />
 <link rel="stylesheet" href="style.css">
-<script src=jquery-3.1.1.js></script>
-<script src=URI.js></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src=URI.js\src\URI.min.js></script>
 </head>
 <body>
 <script type=text/javascript>
