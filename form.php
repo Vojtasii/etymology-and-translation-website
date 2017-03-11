@@ -37,9 +37,8 @@ if(isset($_GET['lang0']) && array_key_exists($_GET['lang0'], $tempdata)) {
     $data2 = $langdata[1];
 }
 else {
-    $langdata = $tempdata["cs"];
-    $data1 = $langdata[0];
-    $data2 = $langdata[1];
+    $data1 = false;
+    $data2 = false;
 }
 
 class LangOptions {
@@ -113,7 +112,9 @@ class LangOptions {
             if($getlang != null) {
                 $langorder = array($getlang => $_GET[$this->name]) + $langorder;
             }
+            else $select .= "<option disabled selected value display:none></option>";
         }
+        else $select .= "<option disabled selected value display:none></option>";
         foreach ($langorder as $l => $l_value) {
             $select .= "<option value='$l_value'>".$l."</option>";
         }
@@ -127,7 +128,9 @@ class LangOptions {
     }        
 }
 
-function createCheckboxField($root, $data) {
+function createCheckboxField($name, $root, $data) {
+    if (empty($data)) return;
+    print "<tr class='main'><th colspan='4'>$name</th></tr><tr>";
     print "<td><input type='checkbox' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root')[c].checked = this.checked\">Vše</td>";
     for ($i = 0; $i != count($data); $i++) {
         $ch = $root.$i;
@@ -137,7 +140,8 @@ function createCheckboxField($root, $data) {
         if (($i + 2) % 4 == 0) {
             print "</tr>\n<tr>";
         }
-    }                
+    }
+    print '</tr>';
 }
 ?>
 
@@ -161,10 +165,10 @@ function createCheckboxField($root, $data) {
         ?>
     </tr>
     <tr class="main"><th colspan="4"><input class="submit" type="submit"></th></tr>
-    <tr class="main"><th colspan="4">Rozsah hledání</th></tr>
-    <tr><?php createCheckboxField("rng", $data1); ?></tr>
-    <tr class="main"><th colspan="4">Kategorie</th></tr>
-    <tr><?php createCheckboxField("cat", $data2); ?></tr>
+        <?php
+        createCheckboxField("Rozsah hledání", "rng", $data1);
+        createCheckboxField("Kategorie", "cat", $data2);
+        ?>
 </table>
 </form>
 
