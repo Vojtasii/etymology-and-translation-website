@@ -8,14 +8,27 @@
 </head>
 <body>
 <script type=text/javascript>
-function changeUrl (action, element) { //URI.js is required
+function changeUrl (action, element, value) { //URI.js is required
     var uri = new URI(location.href);
     switch (action) {
-        case "add": uri.addSearch(element); break;
-        case "rem": uri.removeSearch(element); break;
+        case "add": uri.addQuery(element, value); break;
+        case "rem":
+            var value = uri.query(true);
+            value = value[element];
+            if (value == null) {uri.removeQuery(element); break;}
+            if (typeof value == "object") {value = value[value.length-1]};
+            uri.removeQuery(element, value); break;
         case "set":
+            var query = uri.query(true);
+            query = query[element];
+            if (query == null) {uri.setQuery(element, document.getElementsByName(element).value); break;}
+            if (typeof query == "object") {query[value] = document.getElementsByName(element)[value].value;}
+            else query = document.getElementsByName(element).value;
+            uri.setQuery(element, query);
+            break;
+        case "target":
             var value = document.getElementById("targetslct").value;
-            uri.setSearch(element, value);
+            uri.setQuery(element, value);
     }
     location.href = uri;
 }
@@ -31,8 +44,8 @@ $en = array(array("Word", "Etymology"), array("Sit", "Amet", "et", "Maior", "Deu
 $sk = array(array("Slovo", "Etymológia"), array("Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit"));
 $sl = array(array("Beseda", "Etymologija"), array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet"));
 $tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl);
-if(isset($_GET['lang0']) && array_key_exists($_GET['lang0'], $tempdata)) {
-    $langdata = $tempdata[$_GET['lang0']];
+if(isset($_GET['langT']) && array_key_exists($_GET['langT'], $tempdata)) {
+    $langdata = $tempdata[$_GET['langT']];
     $data1 = $langdata[0];
     $data2 = $langdata[1];
 }
@@ -41,47 +54,57 @@ else {
     $data2 = false;
 }
 
-class LangOptions {
-    private $loclang;
+class SelectOptions {
+    private $locdata;
     private $num = 0;
-    private $name = 'lang0';
+    private $name;
     private $output = array();
+    private $selectedoptions = array();
     
-    public function init($data) {
-        $this->loclang = $data;     
+    public function init($data, $name) {
+        $this->locdata = $data;
+        $this->name = $name;
+        if (isset($_GET[$name."T"])) {$this->selectedoptions[0] = $_GET[$name."T"];}
+        else $this->selectedoptions[0] = null;
+        if (isset($_GET[$name])) {
+            if (is_array($_GET[$name])) {
+                foreach($_GET[$name] as $g) $this->selectedoptions[] = $g;
+            }
+            else $this->selectedoptions[] = $_GET[$name];
+        }
     }
     
     public function create() {
         $select = "<th>";
-        $select .= $this->createLangSelect(isset($_GET[$this->name]), true);
+        $select .= $this->createOptionSelect($this->name."T", true);
         $select .= "</th>";
         $this->output[] = $select;
-        $this->nextlang();
+        $this->num++;
     
-        while ($this->num <= count($this->loclang)) {
+        while ($this->num <= count($this->locdata)) {
             $select = '';
             if ($this->num % 4 == 0) {
                 $select .= "</tr>\n<tr class='main'>";
             }
-            if (isset($_GET[$this->name])) {
+            if ($this->num < count($this->selectedoptions)) {
                 $select .= "<th>";
-                $select .= $this->createLangSelect(true, false);
+                $select .= $this->createOptionSelect($this->name, false);
                 $select .= "</th>";
                 $this->output[] = $select;
-                $this->nextlang();    
+                $this->num++;
             }
             else {
                 $select .= "<th>";
                 switch ($this->num) {
                     case 1:
-                        $select .= $this->addButton("button plus", "add", "+", "lang".$this->num);
+                        $select .= $this->addButton("button plus", "add", "+", "lang[]", $this->num);
                         break;
-                    case count($this->loclang):
-                        $select .= $this->addButton("button minus", "rem", "-", "lang".($this->num-1));
+                    case count($this->locdata):
+                        $select .= $this->addButton("button minus", "rem", "-", "lang[]", $this->num-1);
                         break;
                     default:
-                        $select .= $this->addButton("button minus", "rem", "-", "lang".($this->num-1));
-                        $select .= $this->addButton("button plus", "add", "+", "lang".$this->num);
+                        $select .= $this->addButton("button minus", "rem", "-", "lang[]", $this->num-1);
+                        $select .= $this->addButton("button plus", "add", "+", "lang[]", $this->num);
                 }
                 $select .= "</th>";
                 $this->output[] = $select;
@@ -96,26 +119,29 @@ class LangOptions {
         }        
     }
     
-    private function addButton($class, $id, $text, $name) {
-        return "<button class='$class' type='button' id='$id' onclick='changeUrl(\"$id\", \"$name\")'>$text</button>";
+    private function addButton($class, $id, $text, $name, $value = null) {
+        return "<button class='$class' type='button' id='$id' onclick='changeUrl(\"$id\", \"$name\", \"$value\")'>$text</button>";
     }
     
-    private function createLangSelect($isset, $istarget) {
-        $langorder = $this->loclang;
+    private function createOptionSelect($name, $istarget) {
+        $isset = isset($_GET[$name]);
+        $optionorder = $this->locdata;
         $select = '';
         if ($istarget) {
-            $select .= "<select class='target' name='$this->name' id='targetslct' onchange='changeUrl(\"set\",\"lang0\")'>";
+            $select .= "<select class='target' name='$name' id='targetslct' onchange='changeUrl(\"target\",\"$name\")'>";
         }
-        else $select .= "<select name='$this->name'>";
+        else $select .= "<select name='$name"."[]"."' onchange='changeUrl(\"set\",\"$name"."[]"."\", $this->num-1)'>";
+
         if ($isset) {
-            $getlang = array_search($_GET[$this->name], $langorder);
+            $getlang = array_search($this->selectedoptions[$this->num], $optionorder);
             if($getlang != null) {
-                $langorder = array($getlang => $_GET[$this->name]) + $langorder;
+                $optionorder = array($getlang => $this->selectedoptions[$this->num]) + $optionorder;
             }
             else $select .= "<option disabled selected value display:none></option>";
         }
         else $select .= "<option disabled selected value display:none></option>";
-        foreach ($langorder as $l => $l_value) {
+
+        foreach ($optionorder as $l => $l_value) {
             $select .= "<option value='$l_value'>".$l."</option>";
         }
         $select .= "</select>";
@@ -124,7 +150,7 @@ class LangOptions {
     
     private function nextlang() {
         $this->num++;
-        $this->name = 'lang'.$this->num;
+        //$this->name = 'lang'.$this->num;
     }        
 }
 
@@ -151,8 +177,8 @@ function createCheckboxField($name, $root, $data) {
     <tr class="main">
         <?php
         global $linguis;
-        $langs = new LangOptions();
-        $langs->init($linguis);
+        $langs = new SelectOptions();
+        $langs->init($linguis, "lang");
         $langs->create();
         $langs->push(); 
         ?>
