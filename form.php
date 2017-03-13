@@ -26,30 +26,31 @@ function changeUrl (action, element, value) { //URI.js is required
             var query = uri.query(true);
             query = query[element];
             if (query == null) {uri.removeQuery(element); break;}
-            if (Array.isArray(value)) query = query[query.length-1];
+            if (Array.isArray(query)) {query = query[query.length-1]};
             uri.removeQuery(element, query);
             break;
         case "set":
             //loads the query as an object, selects just one element
-            //checks for emptiness (sets the element without further questions if empty)
             //checks if the value is an array (if it is, changes just the desired value in query)
             ////checks query for an element with the same name and value
             ////if it exists, it exits the function
             //sets the parameter
             var query = uri.query(true);
             query = query[element];
-            if (query == null) {uri.setQuery(element, document.getElementsByName(element).value); break;}
             if (typeof query == "object") {
                 query[value] = document.getElementsByName(element)[value].value;
                 if (uri.hasQuery(element, query[value], true)) {return;}
             }
-            else query = document.getElementsByName(element).value;
+            else {query = document.getElementsByName(element)[value].value;}
             uri.setQuery(element, query);
             break;
         case "target":
             //special case for the target language select, much simpler
             var value = document.getElementById("targetslct").value;
             uri.setQuery(element, value);
+            break;
+       case "delete":
+            uri.query("");
     }
     location.href = uri;
 }
@@ -148,10 +149,11 @@ class SelectOptions {
         $isset = isset($_GET[$name]);
         $optionorder = $this->locdata;
         $select = '';
+        $num_minus_one = $this->num - 1;
         if ($istarget) {
             $select .= "<select class='target' name='$name' id='targetslct' onchange='changeUrl(\"target\",\"$name\")'>";
         }
-        else $select .= "<select name='$name"."[]"."' onchange='changeUrl(\"set\",\"$name"."[]"."\", $this->num-1)'>";
+        else $select .= "<select name=\"$name"."[]"."\" onchange='changeUrl(\"set\",\"$name"."[]"."\", $num_minus_one)'>";
 
         if ($isset) {
             $getlang = array_search($this->selectedoptions[$this->num], $optionorder);
@@ -211,7 +213,7 @@ function createCheckboxField($name, $root, $data) {
         echo "<th colspan='4' rowspan='1'><textarea name='keywords' cols='108' rows='8' form='srchform'>$p</textarea></th>";
         ?>
     </tr>
-    <tr class="main"><th colspan="4"><input class="submit" type="submit"></th></tr>
+    <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='changeUrl("delete")'><input class="submit" type="submit"></th></tr>
         <?php
         createCheckboxField("Rozsah hledání", "rng", $data1);
         createCheckboxField("Kategorie", "cat", $data2);
