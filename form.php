@@ -15,7 +15,7 @@ function changeUrl (action, element, value) { //URI.js is required
             //checks query for an element with the same name and value
             //if it exists it calls itself with the value + "1" (contatenation)
             //otherwise adds the parameter
-            if (uri.hasQuery(element, value, true)) {changeUrl("add", element, value + 1); return;}
+            if (uri.hasQuery(element, value, true)) {changeUrl("add", element, parseInt(value) + 1); return;}
             uri.addQuery(element, value);
             break;
         case "rem":
@@ -31,23 +31,23 @@ function changeUrl (action, element, value) { //URI.js is required
             break;
         case "set":
             //loads the query as an object, selects just one element
+            //checks for emptiness (sets the value immediately if empty)
             //checks if the value is an array (if it is, changes just the desired value in query)
             ////checks query for an element with the same name and value
-            ////if it exists, it exits the function
+            ////if it exists, it swaps the values
             //sets the parameter
             var query = uri.query(true);
             query = query[element];
+            if (query == null) {uri.setQuery(element, document.getElementsByName(element)[value].value); break;}
             if (typeof query == "object") {
-                query[value] = document.getElementsByName(element)[value].value;
-                if (uri.hasQuery(element, query[value], true)) {return;}
+                var temp = document.getElementsByName(element)[value].value;
+                if (uri.hasQuery(element, temp, true)) {
+                    query[query.indexOf(temp)] = query[value];
+                }
+                query[value] = temp;
             }
             else {query = document.getElementsByName(element)[value].value;}
             uri.setQuery(element, query);
-            break;
-        case "target":
-            //special case for the target language select, much simpler
-            var value = document.getElementById("targetslct").value;
-            uri.setQuery(element, value);
             break;
        case "delete":
             uri.query("");
@@ -149,11 +149,11 @@ class SelectOptions {
         $isset = isset($_GET[$name]);
         $optionorder = $this->locdata;
         $select = '';
-        $num_minus_one = $this->num - 1;
+        //$num_minus_one = ;
         if ($istarget) {
-            $select .= "<select class='target' name='$name' id='targetslct' onchange='changeUrl(\"target\",\"$name\")'>";
+            $select .= "<select class='target' name='$name' id='targetslct' onchange='changeUrl(\"set\",\"$name\", \"0\")'>";
         }
-        else $select .= "<select name=\"$name"."[]"."\" onchange='changeUrl(\"set\",\"$name"."[]"."\", $num_minus_one)'>";
+        else $select .= "<select name=\"$name"."[]"."\" onchange='changeUrl(\"set\",\"$name"."[]"."\", " . ($this->num - 1) . ")'>";
 
         if ($isset) {
             $getlang = array_search($this->selectedoptions[$this->num], $optionorder);
