@@ -32,7 +32,7 @@ table input.submit {
     float: right;
     padding: 3px;
     margin: 0px;
-    margin-right: 10px;
+    margin-right: 6px;
 }
 th, td {
     border: 1px solid #dddddd;
@@ -48,5 +48,5 @@ select.target {
 }
 textarea {
     resize: vertical;
-    width: 99%;
+    width: 100%;
 }
