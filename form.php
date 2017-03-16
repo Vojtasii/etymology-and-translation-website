@@ -210,7 +210,7 @@ function createCheckboxField($name, $root, $data) {
         <?php
         $p = ""; 
         if(isset($_GET['keywords'])) {$p = $_GET['keywords'];}
-        echo "<th colspan='4' rowspan='1'><textarea name='keywords' cols='108' rows='8' form='srchform'>$p</textarea></th>";
+        echo "<th colspan='4' rowspan='1'><textarea name='keywords'rows='8' form='srchform'>$p</textarea></th>";
         ?>
     </tr>
     <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='changeUrl("delete")'><input class="submit" type="submit"></th></tr>

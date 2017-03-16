@@ -1,5 +1,5 @@
 ﻿select {
-    min-width: 180px;
+    min-width: 100%;
     min-height: 45px;
 }
 .button {
@@ -26,6 +26,7 @@ table {
     text-align: center;
     table-layout: fixed;
     width: 800px;
+    margin: 0px;
 }
 table input.submit {
     float: right;
@@ -36,7 +37,7 @@ table input.submit {
 th, td {
     border: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 10px;
 }
 tr.main {
     background-color: #dddddd;
@@ -47,4 +48,5 @@ select.target {
 }
 textarea {
     resize: vertical;
+    width: 99%;
 }
