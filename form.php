@@ -19,8 +19,9 @@ $en = array(array("Word", "Etymology"), array("Sit", "Amet", "et", "Maior", "Deu
 $sk = array(array("Slovo", "Etymológia"), array("Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit"));
 $sl = array(array("Beseda", "Etymologija"), array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet"));
 $tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl);
-if(isset($_GET['langT']) && array_key_exists($_GET['langT'], $tempdata)) {
-    $langdata = $tempdata[$_GET['langT']];
+
+if(isset($_GET['lang']) && array_key_exists($_GET['lang'][0], $tempdata)) {
+    $langdata = $tempdata[$_GET['lang'][0]];
     $data1 = $langdata[0];
     $data2 = $langdata[1];
 }
@@ -39,8 +40,6 @@ class SelectOptions {
     public function init($data, $name) {
         $this->locdata = $data;
         $this->name = $name;
-        if (isset($_GET[$name."T"])) {$this->selectedoptions[0] = $_GET[$name."T"];}
-        else $this->selectedoptions[0] = null;
         if (isset($_GET[$name])) {
             if (is_array($_GET[$name])) {
                 foreach($_GET[$name] as $g) $this->selectedoptions[] = $g;
@@ -51,7 +50,7 @@ class SelectOptions {
     
     public function create() {
         $select = "<th>";
-        $select .= $this->createOptionSelect($this->name."T", true);
+        $select .= $this->createOptionSelect($this->name, true);
         $select .= "</th>";
         $this->output[] = $select;
         $this->num++;
@@ -102,11 +101,10 @@ class SelectOptions {
         $isset = isset($_GET[$name]);
         $optionorder = $this->locdata;
         $select = '';
-        //$num_minus_one = ;
         if ($istarget) {
-            $select .= "<select class='target' name='$name' id='targetslct' onchange='changeUrl(\"set\",\"$name\", \"0\")'>";
+            $select .= "<select class='target' name='$name"."[]"."' id='targetslct' onchange=\"changeUrl('set','$name"."[]"."', '$this->num')\">";
         }
-        else $select .= "<select name=\"$name"."[]"."\" onchange='changeUrl(\"set\",\"$name"."[]"."\", " . ($this->num - 1) . ")'>";
+        else $select .= "<select name='$name"."[]"."' onchange=\"changeUrl('set','$name"."[]"."','$this->num')\">";
 
         if ($isset) {
             $getlang = array_search($this->selectedoptions[$this->num], $optionorder);

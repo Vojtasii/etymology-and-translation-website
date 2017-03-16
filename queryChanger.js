@@ -3,9 +3,10 @@
     switch (action) {
         case "add":
             //checks query for an element with the same name and value
-            //if it exists it calls itself with the value + "1" (contatenation)
+            //if it exists it calls itself with the value + 1
             //otherwise adds the parameter
             if (uri.hasQuery(element, value, true)) {changeUrl("add", element, parseInt(value) + 1); return;}
+            if (uri.hasQuery(element, false)) {uri.addQuery(element, value); value = parseInt(value) + 1;}
             uri.addQuery(element, value);
             break;
         case "rem":
