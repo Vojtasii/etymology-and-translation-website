@@ -11,8 +11,12 @@
 <?php
 header('charset=UTF-8');
 
+//form handler
+
+
+//set data
 $linguis = array("Čeština" => "cs", "Français" => "fr", "Lietuvių" => "lt", "English" => "en", "Slovenčina" => "sk", "Slovenščina" => "sl");
-$cs = array(array("Slovo", "Etymologie"), array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior"));
+$cs = array(array("Slovo", "Etymologie"), array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior"));
 $fr = array(array("Mot", "Etymologie"), array("Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum"));
 $lt = array(array("Žodis", "Etymologija"), array("Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam"));
 $en = array(array("Word", "Etymology"), array("Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor"));
@@ -102,9 +106,9 @@ class SelectOptions {
         $optionorder = $this->locdata;
         $select = '';
         if ($istarget) {
-            $select .= "<select class='target' name='$name"."[]"."' id='targetslct' onchange=\"changeUrl('set','$name"."[]"."', '$this->num')\">";
+            $select .= "<select class='target' name='$name"."[]"."' id='targetslct' onchange=\"setParameter('$name"."[]"."', '$this->num')\" required>";
         }
-        else $select .= "<select name='$name"."[]"."' onchange=\"changeUrl('set','$name"."[]"."','$this->num')\">";
+        else $select .= "<select name='$name"."[]"."' onchange=\"setParameter('$name"."[]"."','$this->num')\">";
 
         if ($isset) {
             $getlang = array_search($this->selectedoptions[$this->num], $optionorder);
@@ -133,10 +137,10 @@ function createCheckboxField($title, $root, $data) {
     print "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
     print "<td><label for='$root'>Vše</label><input type='checkbox' id='$root' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root')[c].checked = this.checked\"></td>";
     for ($i = 0; $i != count($data); $i++) {
-        $ch = $root.$i;
-        if(isset($_GET[$ch])) {$ch = 'checked';}
+        //$ch = $root.$i;
+        if (isset($_GET[$root]) && array_search($i, $_GET[$root]) !== false) {$ch = 'checked';}
         else $ch = '';
-        print "<td><label for='$root".$i."'>$data[$i]</label><input class='$root' type='checkbox' id='$root".$i."' name='$root".$i."' $ch></td>";
+        print "<td><label for='$root".$i."'>$data[$i]</label><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch></td>";
         if (($i + 2) % 4 == 0) {
             print "</tr>\n<tr>";
         }
@@ -164,7 +168,7 @@ function createCheckboxField($title, $root, $data) {
         echo "<th colspan='4' rowspan='1'><textarea name='keywords'rows='8' form='srchform'>$p</textarea></th>";
         ?>
     </tr>
-    <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='changeUrl("delete")'><input class="submit" type="submit"></th></tr>
+    <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit"></th></tr>
         <?php
         createCheckboxField("Rozsah hledání", "rng", $data1);
         createCheckboxField("Kategorie", "cat", $data2);
