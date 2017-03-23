@@ -135,12 +135,12 @@ class SelectOptions {
 function createCheckboxField($title, $root, $data) {
     if (empty($data)) return;
     print "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
-    print "<label for='$root'><td><input type='checkbox' id='$root' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root')[c].checked = this.checked\">Vše</td></label>";
+    print "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root')[c].checked = this.checked\">Vše</label></td>";
     for ($i = 0; $i != count($data); $i++) {
         //$ch = $root.$i;
         if (isset($_GET[$root]) && array_search($i, $_GET[$root]) !== false) {$ch = 'checked';}
         else $ch = '';
-        print "<td><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch>$data[$i]</label></td>";
+        print "<td class='checkboxtd'><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch>$data[$i]</label></td>";
         if (($i + 2) % 4 == 0) {
             print "</tr>\n<tr>";
         }

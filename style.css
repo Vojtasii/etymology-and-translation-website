@@ -12,12 +12,16 @@ select.target
 label
 {
     display: block;
-    margin: 1px 0;
+    padding: 10px;
 }
 label:hover
 {
-    background-color: gold;
+    background-color: #eeeeee;
     cursor: pointer;
+}
+.selected
+{
+    background-color: #dddddd;
 }
 input[type="checkbox"]
 {
@@ -69,6 +73,10 @@ th, td
     border: 1px solid #dddddd;
     text-align: left;
     padding: 10px;
+}
+td.checkboxtd
+{
+    padding: 0px;
 }
 tr.main
 {
