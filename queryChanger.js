@@ -52,6 +52,14 @@ function setParameter(element, index) {
     location.href = uri;
 }
 
+function saveTextInUrl(element, text) {
+var uri = new URI(location.href);
+uri.setQuery(element, text);
+console.log(text);
+console.log(uri);
+history.pushState("saveText","keywords",uri);
+}
+
 function resetUrl() {
     var uri = new URI(location.href);
     uri.query("");

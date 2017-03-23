@@ -164,8 +164,8 @@ function createCheckboxField($title, $root, $data) {
     <tr class="main">
         <?php
         $p = ""; 
-        if(isset($_GET['keywords'])) {$p = $_GET['keywords'];}
-        echo "<th colspan='4' rowspan='1'><textarea name='keywords'rows='8' form='srchform'>$p</textarea></th>";
+        if(isset($_GET['keywords'])) $p = $_GET['keywords'];
+        echo "<th colspan='4' rowspan='1'><textarea name='keywords' rows='8' form='srchform' onkeyup='saveTextInUrl(\"keywords\", this.value)'>$p</textarea></th>";
         ?>
     </tr>
     <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit"></th></tr>
