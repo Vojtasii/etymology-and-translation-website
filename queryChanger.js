@@ -30,13 +30,9 @@ function setParameter(element, index) {
     ////checks query for an element with the same name and value
     ////if it exists, it swaps the values
     //sets the parameter
-    console.log(element);
-    console.log(index);
-    console.log(document.getElementsByName(element)[index].value);
     var uri = new URI(location.href);
     var query = uri.query(true);
     query = query[element];
-    console.log(query);
     if (query === null) {uri.setQuery(element, document.getElementsByName(element)[index].value);}
     else {
         if (typeof query == "object") {
@@ -52,12 +48,10 @@ function setParameter(element, index) {
     location.href = uri;
 }
 
-function saveTextInUrl(element, text) {
-var uri = new URI(location.href);
-uri.setQuery(element, text);
-console.log(text);
-console.log(uri);
-history.pushState("saveText","keywords",uri);
+function saveValue(element, value) {
+    var uri = new URI(location.href);
+    uri.setQuery(element, value);
+    history.pushState("saveInUrl","",uri);
 }
 
 function resetUrl() {

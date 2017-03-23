@@ -135,12 +135,12 @@ class SelectOptions {
 function createCheckboxField($title, $root, $data) {
     if (empty($data)) return;
     print "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
-    print "<td><label for='$root'>Vše</label><input type='checkbox' id='$root' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root')[c].checked = this.checked\"></td>";
+    print "<label for='$root'><td><input type='checkbox' id='$root' onclick=\"for(c in document.getElementsByClassName('$root')) document.getElementsByClassName('$root')[c].checked = this.checked\">Vše</td></label>";
     for ($i = 0; $i != count($data); $i++) {
         //$ch = $root.$i;
         if (isset($_GET[$root]) && array_search($i, $_GET[$root]) !== false) {$ch = 'checked';}
         else $ch = '';
-        print "<td><label for='$root".$i."'>$data[$i]</label><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch></td>";
+        print "<td><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch>$data[$i]</label></td>";
         if (($i + 2) % 4 == 0) {
             print "</tr>\n<tr>";
         }
@@ -165,7 +165,7 @@ function createCheckboxField($title, $root, $data) {
         <?php
         $p = ""; 
         if(isset($_GET['keywords'])) $p = $_GET['keywords'];
-        echo "<th colspan='4' rowspan='1'><textarea name='keywords' rows='8' form='srchform' onkeyup='saveTextInUrl(\"keywords\", this.value)'>$p</textarea></th>";
+        echo "<th colspan='4' rowspan='1'><textarea name='keywords' rows='8' form='srchform' onkeyup='saveValue(\"keywords\", this.value)'>$p</textarea></th>";
         ?>
     </tr>
     <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit"></th></tr>

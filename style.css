@@ -1,26 +1,52 @@
-﻿select {
+﻿select
+{
     min-width: 100%;
     min-height: 45px;
 }
-.button {
+select.target
+{
+    border-width: 3px;
+    border-color: rgb(150,150,150);
+}
+
+label
+{
+    display: block;
+    margin: 1px 0;
+}
+label:hover
+{
+    background-color: gold;
+    cursor: pointer;
+}
+input[type="checkbox"]
+{
+    position: relative;
+    top: 1px;
+    margin-right: 5px;
+}
+.button
+{
     color: white;
     padding: 10px;
     font-size: 14px;
     cursor: pointer;
     margin: 2px;
     border-radius: 4px;
-    width: 45px; 
+    width: 45px;
 }
-.minus  {
+.minus
+{
     background-color: #99ccff;
-    
+
 }
-.plus {
+.plus
+{
     background-color: #ff5050;
     float: right;
 }
-
-table {
+table
+{
     font-family: sans-serif;
     border-collapse: collapse;
     text-align: center;
@@ -28,25 +54,28 @@ table {
     width: 800px;
     margin: 0px;
 }
-table input.submit {
-    float: right;
+table input.submit, table input.reset
+{
     padding: 3px;
     margin: 0px;
     margin-right: 6px;
 }
-th, td {
+table input.submit
+{
+    float: right;
+}
+th, td
+{
     border: 1px solid #dddddd;
     text-align: left;
     padding: 10px;
 }
-tr.main {
+tr.main
+{
     background-color: #dddddd;
 }
-select.target {
-    border-width: 3px;
-    border-color: rgb(150,150,150);
-}
-textarea {
+textarea
+{
     resize: vertical;
     width: 100%;
 }
