@@ -11,6 +11,7 @@ select.target
 
 label
 {
+    overflow: hidden;
     display: block;
     padding: 10px;
 }
@@ -19,15 +20,19 @@ label:hover
     background-color: #eeeeee;
     cursor: pointer;
 }
-.selected
-{
-    background-color: #dddddd;
-}
 input[type="checkbox"]
 {
     position: relative;
-    top: 1px;
     margin-right: 5px;
+}
+input[type="checkbox"]:checked
+{
+    box-shadow: 0 0 300px 300px #e8e8e8;
+    z-index: -1;
+}
+.selected
+{
+    background-color: red;
 }
 .button
 {

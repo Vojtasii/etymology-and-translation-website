@@ -1,18 +1,16 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-type" content='text/html; charset=UTF-8' />
-<link rel="stylesheet" href="style.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src=URI.js\src\URI.min.js></script>
-<script src=queryChanger.js></script>
 </head>
 <body>
 <?php
 header('charset=UTF-8');
 
 //form handler
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['sent'])) {
+    //TODO
 
+}
 
 //set data
 $linguis = array("Čeština" => "cs", "Français" => "fr", "Lietuvių" => "lt", "English" => "en", "Slovenčina" => "sk", "Slovenščina" => "sl");
@@ -150,7 +148,7 @@ function createCheckboxField($title, $root, $data) {
 ?>
 
 
-<form method="get" id="srchform" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+<form method="get" id="srchform" action="<?php  echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <table>
     <tr class="main">
         <?php
@@ -168,7 +166,7 @@ function createCheckboxField($title, $root, $data) {
         echo "<th colspan='4' rowspan='1'><textarea name='keywords' rows='8' form='srchform' onkeyup='saveValue(\"keywords\", this.value)'>$p</textarea></th>";
         ?>
     </tr>
-    <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit"></th></tr>
+    <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit" name="sent"></th></tr>
         <?php
         createCheckboxField("Rozsah hledání", "rng", $data1);
         createCheckboxField("Kategorie", "cat", $data2);
