@@ -1,15 +1,11 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-<?php
+﻿<?php
 header('charset=UTF-8');
 
 //form handler
+$POST_RESULTS = false;
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['sent'])) {
     //TODO
-
+    $POST_RESULTS = true;
 }
 
 //set data
@@ -171,8 +167,6 @@ function createCheckboxField($title, $root, $data) {
         createCheckboxField("Rozsah hledání", "rng", $data1);
         createCheckboxField("Kategorie", "cat", $data2);
         ?>
+
 </table>
 </form>
-
-</body>
-</html>

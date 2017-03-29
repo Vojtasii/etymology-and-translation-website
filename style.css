@@ -92,3 +92,7 @@ textarea
     resize: vertical;
     width: 100%;
 }
+div.results
+{
+    width: 800px;
+}

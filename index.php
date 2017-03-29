@@ -14,4 +14,12 @@
 <?php
 require_once('form.php');
 ?>
-</body></html>
+<div class='results'>
+<?php
+if ($POST_RESULTS === true) {
+require_once('database_output.php');
+}
+?>
+</div>
+</body>
+</html>
