@@ -2,12 +2,42 @@
 header('charset=UTF-8');
 //form handler
 $POST_RESULTS = false;
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['sent'])) {
+
+$langErr = $keywordsErr = $rngErr = $catErr = "";
+$keywords = "";
+if (isset($_GET['sent'])) {
     //TODO
-    $POST_RESULTS = true;
+    if (empty($_GET["lang"])) {
+        $langErr = "Vyberte aspoň jeden jazyk";
+    }
+
+    if (empty($_GET["keywords"])) {
+        $keywordsErr = "";
+    } else {
+        $keywords = test_input($_GET["keywords"]);
+        // check if input has only language characters, \pL is a Unicode category
+        if (!preg_match("/^[\s,.'\-\pL]+$/u", $keywords)) {
+          $keywordsErr = "Pouze významové znaky jsou povolené";
+        }
+    }
+
+    if (empty($_GET["rng"])) {
+        $rngErr = "Musíte vybrat rozsah hledání";
+    }
+    if ($langErr . $keywordsErr . $rngErr . $catErr === "") {
+        $POST_RESULTS = true;
+    }
+
 }
 
-//set data
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+
+//set data (temporary)
 $linguis = array("Čeština" => "cs", "Français" => "fr", "Lietuvių" => "lt", "English" => "en", "Slovenčina" => "sk", "Slovenščina" => "sl");
 $cs = array(array("Slovo", "Etymologie"), array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior"));
 $fr = array(array("Mot", "Etymologie"), array("Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum"));
@@ -54,7 +84,7 @@ class SelectOptions {
     
         while ($this->num <= count($this->locdata)) {
             $select = '';
-            if ($this->num % 4 == 0) {
+            if ($this->num % 4 === 0) {
                 $select .= "</tr>\n<tr class='main'>";
             }
             if ($this->num < count($this->selectedoptions)) {
@@ -82,12 +112,10 @@ class SelectOptions {
                 break;
             } //add: a button
         }
-    }
-    
-    public function push() {
+
         foreach ($this->output as $o) {
-            print $o;
-        }        
+            echo $o;
+        }
     }
     
     private function addButton($class, $id, $text, $name, $value = null) {
@@ -122,18 +150,18 @@ class SelectOptions {
 
 function createCheckboxField($title, $root, $data) {
     if (empty($data)) return;
-    print "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
-    print "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick=\"$('.$root').prop('checked', this.checked)\">Vše</label></td>";
+    echo "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
+    echo "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick=\"$('.$root').prop('checked', this.checked)\">Vše</label></td>";
     for ($i = 0; $i != count($data); $i++) {
         //$ch = $root.$i;
         if (isset($_GET[$root]) && array_search($i, $_GET[$root]) !== false) {$ch = 'checked';}
         else $ch = '';
-        print "<td class='checkboxtd'><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch>$data[$i]</label></td>";
-        if (($i + 2) % 4 == 0) {
-            print "</tr>\n<tr>";
+        echo "<td class='checkboxtd'><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch>$data[$i]</label></td>";
+        if (($i + 2) % 4 === 0) {
+            echo "</tr>\n<tr>";
         }
     }
-    print '</tr>';
+    echo '</tr>';
 }
 ?>
 
@@ -145,7 +173,7 @@ function createCheckboxField($title, $root, $data) {
         $langs = new SelectOptions();
         $langs->init($linguis, "lang");
         $langs->create();
-        $langs->push(); 
+        echo "</tr><tr><th class='error' colspan='4'>$langErr</tr>";
         ?>
     </tr>
     <tr class="main">
@@ -153,11 +181,13 @@ function createCheckboxField($title, $root, $data) {
         $p = ""; 
         if(isset($_GET['keywords'])) $p = $_GET['keywords'];
         echo "<th colspan='4' rowspan='1'><textarea name='keywords' rows='8' form='srchform' onkeyup='saveValue(\"keywords\", this.value)'>$p</textarea></th>";
+        echo "</tr><tr><th class='error' colspan='4'>$keywordsErr</tr>";
         ?>
     </tr>
     <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit" name="sent"></th></tr>
         <?php
         createCheckboxField("Rozsah hledání", "rng", $data1);
+        echo "</tr><tr><th class='error' colspan='4'>$rngErr</tr>";
         createCheckboxField("Kategorie", "cat", $data2);
         ?>
 

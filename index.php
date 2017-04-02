@@ -11,9 +11,11 @@
 <script src=listener.js></script>
 </head>
 <body>
-<?php
-require_once('form.php');
-?>
+
+<div class='form'>
+<?php require_once('form.php'); ?>
+</div>
+
 <div class='results'>
 <?php
 if ($POST_RESULTS === true) {
@@ -21,5 +23,6 @@ require_once('database_output.php');
 }
 ?>
 </div>
+
 </body>
 </html>

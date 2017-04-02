@@ -14,6 +14,7 @@ label
     overflow: hidden;
     display: block;
     padding: 10px;
+    position: relative;
 }
 label:hover
 {
@@ -63,7 +64,7 @@ table
     width: 800px;
     margin: 0px;
 }
-table input.submit, table input.reset
+table input
 {
     padding: 3px;
     margin: 0px;
@@ -79,9 +80,15 @@ th, td
     text-align: left;
     padding: 10px;
 }
+th.error
+{
+    padding: 0 0 0 10px;
+    color: #000000;
+    background-color: #e66464;
+}
 td.checkboxtd
 {
-    padding: 0px;
+    padding: 0;
 }
 tr.main
 {
