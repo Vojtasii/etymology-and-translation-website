@@ -1,6 +1,5 @@
-<?php
+﻿<?php
 header('charset=UTF-8');
-
 //form handler
 $POST_RESULTS = false;
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['sent'])) {
@@ -124,7 +123,7 @@ class SelectOptions {
 function createCheckboxField($title, $root, $data) {
     if (empty($data)) return;
     print "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
-    print "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick='$('.$root').prop('checked', this.checked)'>Vše</label></td>";
+    print "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick=\"$('.$root').prop('checked', this.checked)\">Vše</label></td>";
     for ($i = 0; $i != count($data); $i++) {
         //$ch = $root.$i;
         if (isset($_GET[$root]) && array_search($i, $_GET[$root]) !== false) {$ch = 'checked';}
@@ -137,7 +136,6 @@ function createCheckboxField($title, $root, $data) {
     print '</tr>';
 }
 ?>
-
 
 <form method="get" id="srchform" action="<?php  echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <table>
