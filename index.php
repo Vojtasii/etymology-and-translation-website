@@ -12,16 +12,14 @@
 </head>
 <body>
 
-<div class='form'>
-<?php require_once('form.php'); ?>
-</div>
+<div class='gui'>
+    <div class='form'>
+    <?php require_once('form.php'); /* includes $POST_RESULTS and $_GET['lang[]', 'keywords', 'rng[]', 'cat[]'] */ ?>
+    </div>
 
-<div class='results'>
-<?php
-if ($POST_RESULTS === true) {
-require_once('database_output.php');
-}
-?>
+    <div class='results'>
+    <?php require_once('database_output.php'); ?>
+    </div>
 </div>
 
 </body>
