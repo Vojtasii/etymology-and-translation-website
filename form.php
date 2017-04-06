@@ -24,6 +24,7 @@ if (isset($_GET['sent'])) {
     if (empty($_GET["rng"])) {
         $rngErr = "Musíte vybrat rozsah hledání";
     }
+
     if ($langErr . $keywordsErr . $rngErr . $catErr === "") {
         $POST_RESULTS = true;
     }
@@ -37,6 +38,40 @@ function test_input($data) {
   return $data;
 }
 
+//GET DATA FROM MYSQL SERVER
+$dbini = parse_ini_file('credentials.ini'); //secret file, make your own
+   define("dbhost", $dbini["dbhost"]);
+   define("dbuser", $dbini["dbuser"]);
+   define("dbpass", $dbini["dbpass"]);
+$conn = mysqli_connect(dbhost, dbuser, dbpass);
+mysqli_select_db($conn, 'dictionaries');
+$sql = "SELECT title, code FROM dictionaries_list";
+$result = mysqli_query($conn, $sql);  // Get all dictionaries' titles and their code
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $sql = "SELECT `COLUMN_NAME`" .
+    "FROM `INFORMATION_SCHEMA`.`COLUMNS`" .
+    "WHERE `TABLE_SCHEMA`='dictionaries' " .
+        "AND `TABLE_NAME`='$row[title]';";
+        //echo $sql;
+    $columns = mysqli_query($conn, $sql);
+    printf("Select returned %d rows.\n", mysqli_num_rows($columns));
+    //foreach ($columns as $c => $c_value) {foreach ($c_value as $d => $d_value) {echo $c;echo $d_value;echo"\t";}}
+}
+/*
+$tables = mysqli_fetch_array($result, MYSQLI_NUM);
+printf ("\n%s => %s\n",$tables[0],$tables[1]);
+*/
+/*$sql = "SELECT `COLUMN_NAME`" .
+    "FROM `INFORMATION_SCHEMA`.`COLUMNS`" .
+    "WHERE `TABLE_SCHEMA`='dictionaries'" .
+        "AND `TABLE_NAME`='yourtablename';"; */
+
+
+
+mysqli_close($conn);
+
+
 //set data (temporary)
 $linguis = array("Čeština" => "cs", "Français" => "fr", "Lietuvių" => "lt", "English" => "en", "Slovenčina" => "sk", "Slovenščina" => "sl");
 $cs = array(array("Slovo", "Etymologie"), array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior"));
@@ -47,6 +82,7 @@ $sk = array(array("Slovo", "Etymológia"), array("Amet", "et", "Maior", "Deum", 
 $sl = array(array("Beseda", "Etymologija"), array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet"));
 $tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl);
 
+
 if(isset($_GET['lang']) && array_key_exists($_GET['lang'][0], $tempdata)) {
     $langdata = $tempdata[$_GET['lang'][0]];
     $data1 = $langdata[0];
@@ -56,6 +92,26 @@ else {
     $data1 = false;
     $data2 = false;
 }
+
+/*foreach ($linguis as $l => $l_code) {
+    $langdata = $tempdata[$l_code];
+    $data1 = $langdata[0];
+    $data2 = $langdata[1];
+
+$sql = "CREATE TABLE IF NOT EXISTS $l( ".
+       "id_" . $l_code . " INT NOT NULL AUTO_INCREMENT, ".
+       "$data1[0] VARCHAR(45), ".
+       "$data1[1] MEDIUMTEXT, ".
+       "PRIMARY KEY ( id_" . $l_code . " )); ";
+echo $sql;
+$result = mysqli_query($conn, $sql);
+if(! $result )
+   {
+     die(mysqli_error($conn));
+   }
+
+}
+mysqli_close($conn); */
 
 class SelectOptions {
     private $locdata;
@@ -151,7 +207,7 @@ class SelectOptions {
                 if ($i % 4 === 0) { echo $this->output[$i]; continue; }
                 echo "<th><select disabled" . substr($this->output[$i], 11);
             }
-            echo "<th><select class='hidden'></select></th>";
+            echo "<th><button class='button hidden'>+</button></th>";
         }
         else foreach ($this->output as $o) {
             echo $o;
@@ -164,10 +220,10 @@ function createCheckboxField($title, $root, $data) {
     echo "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
     echo "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick=\"$('.$root').prop('checked', this.checked)\">Vše</label></td>";
     for ($i = 0; $i != count($data); $i++) {
-        //$ch = $root.$i;
-        if (isset($_GET[$root]) && array_search($i, $_GET[$root]) !== false) {$ch = 'checked';}
+        $pow = pow(2, $i);
+        if (isset($_GET[$root]) && array_search($pow, $_GET[$root]) !== false) {$ch = 'checked';}
         else $ch = '';
-        echo "<td class='checkboxtd'><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$i' $ch>$data[$i]</label></td>";
+        echo "<td class='checkboxtd'><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$pow' $ch>$data[$i]</label></td>";
         if (($i + 2) % 4 === 0) {
             echo "</tr>\n<tr>";
         }

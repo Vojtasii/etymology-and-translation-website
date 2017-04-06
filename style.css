@@ -1,18 +1,17 @@
 ﻿/*DIVS*/
 div.gui {
-    margin-left:auto;
-    margin-right:auto;
-    width:90%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border: 1px solid rgb(150,150,150);
+    overflow: auto;
+    text-align: center;
 }
-div.results
+
+div.form, div.results
 {
-    //float: right;
-    float: left;
-}
-div.form
-{
-    float: left;
-    //float: right;
+    display: inline-block;
+    padding-bottom: 35px
 }
 /*INPUTS*/
 select
@@ -25,7 +24,7 @@ select.target
     border-width: 3px;
     border-color: rgb(150,150,150);
 }
-select.hidden
+.hidden
 {
     visibility: hidden;
 }
