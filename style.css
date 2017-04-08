@@ -8,7 +8,7 @@ div.gui {
     text-align: center;
 }
 
-div.form, div.results
+div.form, div.translate
 {
     display: inline-block;
     padding-bottom: 35px
@@ -88,6 +88,10 @@ table
     table-layout: fixed;
     width: 800px;
     margin: 0px;
+}
+table.search
+{
+    width: 100%;
 }
 table input
 {

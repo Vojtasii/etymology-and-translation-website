@@ -9,6 +9,9 @@
 <script src=URI.js\src\URI.min.js></script>
 <script src=queryChanger.js></script>
 <script src=listener.js></script>
+<?php
+include('DBconn.class.php');
+?>
 </head>
 <body>
 
@@ -17,9 +20,12 @@
     <?php require_once('form.php'); /* includes $POST_RESULTS and $_GET['lang[]', 'keywords', 'rng[]', 'cat[]'] */ ?>
     </div>
 
-    <div class='results'>
-    <?php require_once('database_output.php'); ?>
+    <div class='translate'>
+    <?php require_once('translate_output.php'); ?>
     </div>
+</div>
+<div>
+    <?php require_once('search_output.php'); ?>
 </div>
 
 </body>

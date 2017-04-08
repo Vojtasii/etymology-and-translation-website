@@ -20,6 +20,7 @@
             if (Array.isArray(query)) {query = query[query.length-1]};
             uri.removeQuery(element, query);
     }
+    uri.removeQuery("sent");
     location.href = uri;
 }
 
@@ -27,15 +28,15 @@ function setParameter(element, index) {
     //loads the query as an object, selects just one element
     //checks for emptiness (sets the value immediately if empty)
     //checks if the value is an array (if it is, changes just the desired value in query)
-    ////checks query for an element with the same name and value
-    ////if it exists, it swaps the values
+    //  checks query for an element with the same name and value
+    //  if it exists, it swaps the values
     //sets the parameter
     var uri = new URI(location.href);
     var query = uri.query(true);
     query = query[element];
     if (query === null) {uri.setQuery(element, document.getElementsByName(element)[index].value);}
     else {
-        if (typeof query == "object") {
+        if (typeof query === "object") {
             var temp = document.getElementsByName(element)[index].value;
             if (uri.hasQuery(element, temp, true)) {
                 query[query.indexOf(temp)] = query[index];
@@ -45,12 +46,14 @@ function setParameter(element, index) {
         else {query = document.getElementsByName(element)[index].value;}
         uri.setQuery(element, query);
     }
+    uri.removeQuery("sent");
     location.href = uri;
 }
 
 function saveValue(element, value) {
     var uri = new URI(location.href);
     uri.setQuery(element, value);
+    uri.removeQuery("sent");
     history.pushState("saveInUrl","",uri);
 }
 
@@ -59,3 +62,4 @@ function resetUrl() {
     uri.query("");
     location.href = uri;
 }
+

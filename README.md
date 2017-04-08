@@ -4,7 +4,7 @@ Project purpose
 ---------------
 The aim of this project is to create a website with a simple translator where
 you can search a word for its etymology. This website will then be presented as
-my Maturita project at Gymnázium Nad Álejí. Maturita is the final exam at the
+my Maturita project at Gymnázium Nad Alejí. Maturita is the final exam at the
 end of highschool in Czechia.
 
 Planned Features

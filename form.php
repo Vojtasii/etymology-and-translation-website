@@ -1,14 +1,41 @@
 ﻿<?php
 header('charset=UTF-8');
+//GET DATA FROM MYSQL SERVER
+$dbini = parse_ini_file('.htcredentials.ini');
+   define("dbhost", $dbini["dbhost"]);
+   define("dbuser", $dbini["dbuser"]);
+   define("dbpass", $dbini["dbpass"]);
+   define("dbname", $dbini["dbname"]);
+$conn = new DBconn(dbhost, dbuser, dbpass, dbname);
+
+function getDictionariesTitleAndCode() {
+    global $conn;
+    $sql = "SELECT title, code FROM dictionaries_list";
+    $result = Array();
+    $rows = $conn->queryAll($sql);
+    for ($i = 0; $i < $conn->queryCount($sql); $i++) {
+        $result += [$rows[$i]['title'] => $rows[$i]['code']];
+    }
+    return $result;
+}
+$linguis = getDictionariesTitleAndCode();
+
 //form handler
 $POST_RESULTS = false;
-
 $langErr = $keywordsErr = $rngErr = $catErr = "";
-$keywords = "";
+$lang = $keywords = "";
 if (isset($_GET['sent'])) {
     //TODO
     if (empty($_GET["lang"])) {
         $langErr = "Vyberte aspoň jeden jazyk";
+    } else {
+        for ($i = 0; $i < count($_GET["lang"]); $i++) {
+            $lang = test_input($_GET["lang"][$i]);
+            if (!array_search($_GET['lang'][0], $linguis)) {
+                $langErr = "Neplatný vstup";
+                break;
+            }
+        }
     }
 
     if (empty($_GET["keywords"])) {
@@ -38,55 +65,28 @@ function test_input($data) {
   return $data;
 }
 
-//GET DATA FROM MYSQL SERVER
-$dbini = parse_ini_file('credentials.ini'); //secret file, make your own
-   define("dbhost", $dbini["dbhost"]);
-   define("dbuser", $dbini["dbuser"]);
-   define("dbpass", $dbini["dbpass"]);
-$conn = mysqli_connect(dbhost, dbuser, dbpass);
-mysqli_select_db($conn, 'dictionaries');
-$sql = "SELECT title, code FROM dictionaries_list";
-$result = mysqli_query($conn, $sql);  // Get all dictionaries' titles and their code
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $sql = "SELECT `COLUMN_NAME`" .
-    "FROM `INFORMATION_SCHEMA`.`COLUMNS`" .
-    "WHERE `TABLE_SCHEMA`='dictionaries' " .
-        "AND `TABLE_NAME`='$row[title]';";
-        //echo $sql;
-    $columns = mysqli_query($conn, $sql);
-    printf("Select returned %d rows.\n", mysqli_num_rows($columns));
-    //foreach ($columns as $c => $c_value) {foreach ($c_value as $d => $d_value) {echo $c;echo $d_value;echo"\t";}}
-}
-/*
-$tables = mysqli_fetch_array($result, MYSQLI_NUM);
-printf ("\n%s => %s\n",$tables[0],$tables[1]);
-*/
-/*$sql = "SELECT `COLUMN_NAME`" .
-    "FROM `INFORMATION_SCHEMA`.`COLUMNS`" .
-    "WHERE `TABLE_SCHEMA`='dictionaries'" .
-        "AND `TABLE_NAME`='yourtablename';"; */
-
-
-
-mysqli_close($conn);
-
 
 //set data (temporary)
-$linguis = array("Čeština" => "cs", "Français" => "fr", "Lietuvių" => "lt", "English" => "en", "Slovenčina" => "sk", "Slovenščina" => "sl");
-$cs = array(array("Slovo", "Etymologie"), array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior"));
-$fr = array(array("Mot", "Etymologie"), array("Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum"));
-$lt = array(array("Žodis", "Etymologija"), array("Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam"));
-$en = array(array("Word", "Etymology"), array("Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor"));
-$sk = array(array("Slovo", "Etymológia"), array("Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit"));
-$sl = array(array("Beseda", "Etymologija"), array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet"));
+$cs = array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior");
+$fr = array("Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum");
+$lt = array("Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam");
+$en = array("Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor");
+$sk = array("Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit");
+$sl = array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet");
 $tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl);
 
 
-if(isset($_GET['lang']) && array_key_exists($_GET['lang'][0], $tempdata)) {
-    $langdata = $tempdata[$_GET['lang'][0]];
-    $data1 = $langdata[0];
-    $data2 = $langdata[1];
+if(isset($_GET['lang']) && array_search($_GET['lang'][0], $linguis)) {
+    $data2 = $tempdata[$_GET['lang'][0]];
+    $sql = "SELECT `table` FROM dictionaries_list WHERE code='" . $_GET['lang'][0] . "'";
+    $result = $conn->queryOne($sql);
+    $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='dictionaries' AND `TABLE_NAME`='$result[table]'";
+    $data1 = $conn->queryAll($sql);
+    $result = Array();
+    for ($i = 1; $i < $conn->queryCount($sql); $i++) {
+        $result[] = $data1[$i]['COLUMN_NAME'];
+    }
+    $data1 = $result;
 }
 else {
     $data1 = false;
@@ -120,7 +120,7 @@ class SelectOptions {
     private $output = array();
     private $selectedoptions = array();
     
-    public function init($data, $name) {
+    public function __construct($data, $name) {
         $this->locdata = $data;
         $this->name = $name;
         if (isset($_GET[$name])) {
@@ -220,7 +220,7 @@ function createCheckboxField($title, $root, $data) {
     echo "<tr class='main'><th colspan='4'>$title</th></tr><tr>";
     echo "<td class='checkboxtd'><label for='$root'><input type='checkbox' id='$root' onclick=\"$('.$root').prop('checked', this.checked)\">Vše</label></td>";
     for ($i = 0; $i != count($data); $i++) {
-        $pow = pow(2, $i);
+        $pow=$i;//$pow = pow(2, $i);
         if (isset($_GET[$root]) && array_search($pow, $_GET[$root]) !== false) {$ch = 'checked';}
         else $ch = '';
         echo "<td class='checkboxtd'><label for='$root".$i."'><input class='$root' type='checkbox' id='$root".$i."' name='$root"."[]"."' value='$pow' $ch>$data[$i]</label></td>";
@@ -237,8 +237,7 @@ function createCheckboxField($title, $root, $data) {
     <tr class="main">
         <?php
         global $linguis;
-        $langs = new SelectOptions();
-        $langs->init($linguis, "lang");
+        $langs = new SelectOptions($linguis, "lang");
         $langs->create();
         $langs->push();
         echo "</tr><tr><th class='error' colspan='4'>$langErr</th>";
@@ -252,7 +251,10 @@ function createCheckboxField($title, $root, $data) {
         echo "</tr><tr><th class='error' colspan='4'>$keywordsErr</th>";
         ?>
     </tr>
-    <tr class="main"><th colspan="4"><input class="reset" type="reset" onclick='resetUrl()'><input class="submit" type="submit" name="sent"></th></tr>
+    <tr class="main"><th colspan="4">
+        <input class="reset" type="reset" onclick='resetUrl()'>
+        <input class="submit" type="submit" name="sent" value="Vyhledat"></th>
+    </tr>
         <?php
         createCheckboxField("Rozsah hledání", "rng", $data1);
         echo "</tr><tr><th class='error' colspan='4'>$rngErr</th>";
