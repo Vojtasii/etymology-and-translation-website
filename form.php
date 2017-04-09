@@ -43,7 +43,7 @@ if (isset($_GET['sent'])) {
     } else {
         $keywords = test_input($_GET["keywords"]);
         // check if input has only language characters, \pL is a Unicode category
-        if (!preg_match("/^[\s,.'&quot;«»„“\-\pL]+$/u", $keywords)) {
+        if (!preg_match("/^[\s,.'&quot;:«»„“\-\pL]+$/u", $keywords)) {
           $keywordsErr = "Pouze významové znaky jsou povolené";
         }
     }

@@ -25,7 +25,7 @@ include('DBconn.class.php');
     </div>
 </div>
 <div>
-    <?php require_once('search_output.php'); ?>
+    <?php if ($POST_RESULTS === true && isset($_GET['keywords'])) require_once('search_output.php'); ?>
 </div>
 
 </body>

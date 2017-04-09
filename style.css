@@ -37,7 +37,7 @@ label
 }
 label:hover
 {
-    background-color: #eeeeee;
+    background-color: #efefef;
     cursor: pointer;
 }
 input[type="checkbox"]
@@ -92,6 +92,7 @@ table
 table.search
 {
     width: 100%;
+    table-layout: auto;
 }
 table input
 {
@@ -115,6 +116,12 @@ th.error
     color: #000000;
     background-color: #f37171;
 }
+th.suggest
+{
+    padding: 0 0 0 10px;
+    color: #000000;
+    background-color: #33cc66;
+}
 td.checkboxtd
 {
     padding: 0;
@@ -122,6 +129,10 @@ td.checkboxtd
 tr.main
 {
     background-color: #dddddd;
+}
+tr.output
+{
+    background-color: #efefef;
 }
 
 
