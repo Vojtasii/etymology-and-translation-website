@@ -1,22 +1,33 @@
 ﻿<?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     include("../class.php/DBconn.class.php");
-    $dbini = parse_ini_file('../../.htcredentials.ini');
+    $dbini = parse_ini_file('../.htcredentials.ini');
        define("dbhost", $dbini["dbhost"]);
        define("dbuser", $_POST['dbuser']);
        define("dbpass", $_POST['dbpass']);
        define("dbname", $dbini["dbname"]);
     $conn = new DBconn(dbhost, dbuser, dbpass, dbname);
 
+
     $data = csv_values("DATA/dictionaries_list.csv");
-    $sql = "LOCK TABLES `dictionaries_list` WRITE";
-    $conn->query($sql); //($data[columns])
-    $sql = "INSERT INTO `dictionaries_list`
-            VALUES $data[values]";
-            //WHERE $data[columns] NOT IN (SELECT $data[columns] FROM `dictionaries_list`)";
-    $conn->query($sql);
-    $sql = "UNLOCK TABLES";
-    $conn->query($sql);
+    insert_csv_into_db($data, "dictionaries_list");
+
+
+
+    $result = getDictionariesList("`table`, `csv`");
+    //print_r($result);
+    $table = array_column($result, 'table');
+    $csv = array_column($result, 'csv');
+    print_r($csv);
+    print_r($table);
+    for ($i = 0; $i < count($csv); $i++) {
+        if (!empty($csv[$i])) {
+            insert_csv_into_db(csv_values("DATA/".$csv[$i]), $table[$i]);
+            echo "<br>importing $csv[$i]<br>";
+        }
+
+
+    }
 }
 
 function csv_values ($path) {
@@ -32,6 +43,28 @@ function csv_values ($path) {
     $columns = str_replace("\"", "", $columns);
     $columns = "`" . str_replace(";", "`,`", $columns) . "`";
     return array('columns' => $columns, 'values' => $data);
+}
+
+function insert_csv_into_db ($data, $table) {
+    global $conn;
+    /*$sql = "TRUNCATE TABLE `$table`";
+    $conn->query($sql);*/
+    $sql = "LOCK TABLES `$table` WRITE";
+    $conn->query($sql); //($data[columns])
+    $sql = "INSERT INTO `$table`
+            VALUES $data[values]";
+    $conn->query($sql);
+    $sql = "UNLOCK TABLES";
+    $conn->query($sql);
+
+}
+
+function getDictionariesList($args, $conds = null) {
+    global $conn;
+    $sql = "SELECT $args FROM dictionaries_list";
+    if ($conds !== null) $sql .= " WHERE $conds";
+    $result = $conn->queryAll($sql);
+    return $result;
 }
 
 ?>

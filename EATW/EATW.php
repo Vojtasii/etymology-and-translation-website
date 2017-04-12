@@ -1,5 +1,4 @@
 ﻿<script src=queryChanger.js></script>
-<script src=listener.js></script>
 <script src=jquery-1.10.2.min.js></script>
 <script src=URI.min.js></script>
 
