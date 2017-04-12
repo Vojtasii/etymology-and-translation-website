@@ -1,5 +1,5 @@
 ﻿<?php
-include("..\class.php\DBconn.class.php");
+include("../class.php/DBconn.class.php");
 $raw = file_get_contents("dictionaries_list.csv");
 $data = str_getcsv($raw, "\n"); //parse the rows
 foreach($data as &$row) $row = str_getcsv($row, ";"); //parse the items in rows
@@ -12,7 +12,7 @@ $data = $temp;
 $data = implode($data, ",");
 
 
-$dbini = parse_ini_file('..\..\.htcredentials.ini');
+$dbini = parse_ini_file('../../.htcredentials.ini');
    define("dbhost", $dbini["dbhost"]);
    define("dbuser", $dbini["dbuser"]);
    define("dbpass", "");//$dbini["dbpass"]);

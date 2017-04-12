@@ -2,8 +2,8 @@
 <script src=EATW\listener.js></script>
 
 <?php
-include('class.php\DBconn.class.php');
-include('class.php\SelectOptions.class.php');
+include('class.php/DBconn.class.php');
+include('class.php/SelectOptions.class.php');
 ?>
 
 <div class='gui'>

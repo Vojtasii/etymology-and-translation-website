@@ -10,6 +10,6 @@
 
 </head>
 <body>
-<?php require_once('EATW\EATW.php'); ?>
+<?php require_once('EATW/EATW.php'); ?>
 </body>
 </html>
