@@ -11,6 +11,11 @@ class DBconn{
         $this->conn = @new PDO("mysql:host=$dbhost;dbname=$dbname", $dbuser, $dbpass, $options);
     }
 
+    function query($query, $param = Array()) {
+        $result = $this->conn->prepare($query);
+        $result->execute($param);
+    }
+
     function queryCount($query, $param = Array()) {
         $result = $this->conn->prepare($query);
         $result->execute($param);
