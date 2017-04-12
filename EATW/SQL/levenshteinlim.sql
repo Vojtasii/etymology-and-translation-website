@@ -3,8 +3,7 @@
   DETERMINISTIC 
   BEGIN 
     DECLARE s1_len, s2_len, i, j, c, c_temp, cost, c_min INT; 
-    DECLARE s1_char CHAR; 
-    -- max strlen=255 
+    DECLARE s1_char CHAR;
     DECLARE cv0, cv1 VARBINARY(256); 
     SET s1_len = CHAR_LENGTH(s1), s2_len = CHAR_LENGTH(s2), cv1 = 0x00, j = 1, i = 1, c = 0, c_min = 0; 
     IF s1 = s2 THEN 

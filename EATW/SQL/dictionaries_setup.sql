@@ -23,11 +23,12 @@ DROP TABLE IF EXISTS `dictionaries_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dictionaries_list` (
-  `﻿"iddictionaries_list"` int(11) DEFAULT NULL,
+  `﻿iddictionaries_list` int(11) DEFAULT NULL,
   `table` text,
   `title` text,
   `code` text,
-  `translate` text
+  `translate` text,
+  `csv` text,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -43,7 +44,6 @@ CREATE FUNCTION levenshteinlim( s1 VARCHAR(255), s2 VARCHAR(255), n INT)
   BEGIN
     DECLARE s1_len, s2_len, i, j, c, c_temp, cost, c_min INT;
     DECLARE s1_char CHAR;
-    -- max strlen=255
     DECLARE cv0, cv1 VARBINARY(256);
     SET s1_len = CHAR_LENGTH(s1), s2_len = CHAR_LENGTH(s2), cv1 = 0x00, j = 1, i = 1, c = 0, c_min = 0;
     IF s1 = s2 THEN

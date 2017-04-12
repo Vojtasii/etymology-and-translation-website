@@ -1,10 +1,22 @@
-﻿<script src=EATW\queryChanger.js></script>
-<script src=EATW\listener.js></script>
+﻿<script src=queryChanger.js></script>
+<script src=listener.js></script>
+<script src=jquery-1.10.2.min.js></script>
+<script src=URI.min.js></script>
 
 <?php
 include('class.php/DBconn.class.php');
 include('class.php/SelectOptions.class.php');
 ?>
+
+<link rel="stylesheet" href="EATWstyle.css">
+
+<div id="menu-box">
+<ul id="menu" class="clearfix">
+  <li class="first"><a href="../index.php">Úvod</a></li>
+  <li><a class="active" href="EATW/EATW.php">Slovník</a></li>
+  <li><a href="#">Návod k použití</a></li>
+</ul>
+</div>
 
 <div class='gui'>
     <div class='form'>

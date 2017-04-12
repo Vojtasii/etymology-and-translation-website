@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Uživatelská příručka</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div id="menu-box">
+<ul id="menu" class="clearfix">
+  <li class="first"><a href="../index.php">Úvod</a></li>
+  <li><a href="EATW/EATW.php">Slovník</a></li>
+  <li><a class="active" href="userguide.html">Návod k použití</a></li>
+</ul>
+</div>
+
+<h1>Uživatelská příručka</h1>
+<h1>Etymologický slovník</h1>
+
+<h2>Návod k použítí</h2>
+<p>
+Tato stránka slouží k vyhledávání v etymologických nebo případně běžných slovnících.
+ Zároveň slouží jakožto jednoduchý překladač, což se dá využít například při zkoumání původu slov mezi jazyky.<br>
+</p>
+<h3>Jak hledat</h3>
+<p>
+Nejprve musíte vybrat slovník, který chcete prohledávat.<br>
+<select>
+<option>Slovník1</option>
+<option>Slovník2</option>
+<option>Slovník3</option>
+</select>
+<br><br>
+Dále si vyberte rozsah hledání. Obvyklá struktura slovníku je [Slovo, Etymologie] a
+ případně další položky jako je překlad do cizího jazyka nebo výslovnost. <br>
+<table>
+<tr><th>Rozsah hledání</th></tr>
+<tr>
+<td><label for='rng0'><input class='rng' type='checkbox' id='rng0' name='rng[]' value='0' >Slovo</label>         </td>
+<td><label for='rng1'><input class='rng' type='checkbox' id='rng1' name='rng[]' value='1' >Etymologie</label></td>
+</tr>
+</table>
+</p>
+<p>
+Pak napište do textového pole jeden nebo více výrazů, které chcete vyhledat. <br>
+Pokud dáte více slov do uvozovek: "první slovo druhé slovo", budou hledána jako celek. <br>
+Pokud na začátek nebo konec slova napíšete * nebo % tak to bude výraz brát jen jako část slova.
+Například: s* bude hledat všechna slova začínající na písmeno "s".
+Pokud hledání selže, program se vám pokusí napovědět.
+</p>
+<h3>Překlad</h3>
+<p>
+Vedle výběru slovníku si můžete všimnout tlačítka [+]
+<button class='button plus' type='button' id='add'>+</button><br>
+Toto tlačítko vám přidá další výběr slovníku a zároveň přidá nové textové pole,
+do kterého není možné psát. Tam se bude vypisovat překlad vámi napsaných výrazů,
+pokud existuje spojení mezi vámi zvoleným slovníkem a tímto novým.<br>
+Tlačítkem [-] pak výběr opět odstraníte.
+<button class='button minus' type='button' id='rem'>-</button><br>
+</p>
+<h3>Výsledek</h3>
+<p>
+Dole pod formulářem se vám pak bude vypisovat výsledek hledání. Pokud se vám zobrazí chyba<br>
+<code>Chyba při hledání v odstavci</code><br> tak to znamená, že váš výraz nebyl nalezen a
+server měl problém s hledáním nejbližšího podobného slova.
+</p>

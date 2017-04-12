@@ -1,0 +1,170 @@
+﻿body
+{
+  font-family: sans-serif;
+  line-height: 1.5;
+}
+
+/*MENU*/
+#menu-box {margin-left:auto;margin-right:auto;background: #99CCFF;}
+#menu {width: 960px; margin: 0 auto;}
+
+#menu li
+{
+  //float: left;
+  display: inline;
+  list-style-type: none;
+  text-align: center;
+}
+
+#menu li a
+{
+  text-decoration: none;
+  color: #FFF;
+  //float: left;
+  display: inline;
+  line-height: 35px;
+  padding: 0 18px;
+  border-right: 1px solid #6E9DBE;
+}
+
+#menu li.first a {border-left: 1px solid #6E9DBE;}
+#menu li a:hover, #menu li a.active {background-color: #3366cc;}
+
+/*DIVS*/
+div.gui {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    border: 1px solid rgb(150,150,150);
+    overflow: auto;
+    text-align: center;
+}
+
+div.form, div.translate
+{
+    display: inline-block;
+    padding-bottom: 35px
+}
+/*INPUTS*/
+select
+{
+    min-width: 100%;
+    min-height: 45px;
+}
+select.target
+{
+    border-width: 3px;
+    border-color: rgb(150,150,150);
+}
+.hidden
+{
+    visibility: hidden;
+}
+label
+{
+    overflow: hidden;
+    display: block;
+    padding: 10px;
+    position: relative;
+}
+label:hover
+{
+    background-color: #efefef;
+    cursor: pointer;
+}
+input[type="checkbox"]
+{
+    position: relative;
+    margin-right: 5px;
+}
+input[type="checkbox"]:checked
+{
+    box-shadow: 0 0 300px 300px #e8e8e8;
+    z-index: -1;
+}
+.selected
+{
+    background-color: red;
+}
+.button
+{
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 2px;
+    border-radius: 4px;
+    width: 45px;
+}
+.minus
+{
+    background-color: #99ccff;
+
+}
+.plus
+{
+    background-color: #ff5050;
+    float: right;
+}
+textarea
+{
+    resize: vertical;
+    width: 100%;
+}
+/*TABLE PARTS*/
+table
+{
+    font-family: sans-serif;
+    border-collapse: collapse;
+    text-align: center;
+    table-layout: fixed;
+    width: 800px;
+    margin: 0px;
+}
+table.search
+{
+    width: 100%;
+    table-layout: auto;
+}
+table input
+{
+    padding: 3px;
+    margin: 0px;
+    margin-right: 6px;
+}
+table input.submit
+{
+    float: right;
+}
+th, td
+{
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 10px;
+}
+th.error
+{
+    padding: 0 0 0 10px;
+    color: #000000;
+    background-color: #f37171;
+}
+th.suggest
+{
+    padding: 0 0 0 10px;
+    color: #000000;
+    background-color: #33cc66;
+}
+td.checkboxtd
+{
+    padding: 0;
+}
+tr.main
+{
+    background-color: #dddddd;
+}
+tr.output
+{
+    background-color: #efefef;
+}
+
+

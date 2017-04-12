@@ -31,7 +31,6 @@ if (isset($_GET['sent'])) {
                 $langErr = "Neplatný vstup";
                 break;
             }
-
         }
     }
 
