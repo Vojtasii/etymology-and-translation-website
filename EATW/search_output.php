@@ -1,19 +1,13 @@
 ﻿<table class='search'>
 <?php
-$values = explodeKeywords($_GET['keywords']);
-
-$sql = "SELECT `table`, title FROM dictionaries_list WHERE code='" . $_GET['lang'][0] . "'";
-$result = $conn->queryOne($sql);
-$table = $result['table'];
-$title = $result['title'];
 foreach ($_GET['rng'] as $g) {
     foreach ($values as $v) {
-        echo "<tr class='main'><th colspan='4'>\"$v\" ∈ \"$data1[$g]\" ∈ \"$title\"</th></tr><tr>";
+        echo "<tr class='main'><th colspan='100%'>\"$v\" ∈ \"$data1[$g]\" ∈ \"$title\"</th></tr><tr>";
         $sql = "SELECT * FROM $table WHERE " . $data1[$g] . "='$v'";
         $result = $conn->queryAll($sql);
 
         if (!$result) {
-            $sql = "SELECT * FROM $table WHERE " . $data1[$g] . " LIKE '%$v%'";
+            $sql = "SELECT * FROM $table WHERE " . $data1[$g] . " LIKE '$v'";
             $result = $conn->queryAll($sql);
         }
 
@@ -24,10 +18,10 @@ foreach ($_GET['rng'] as $g) {
                     ORDER BY @lvdistance LIMIT 8";
             try {
                 $result = $conn->queryAll($sql);
-                if ($result) { echo "<tr><th colspan=4 class='suggest'>Mysleli jste některý z těchto výrazů?</th></tr>"; }
-                else { echo "<tr><th colspan=4 class='error'>Nebyl nalezen žádný odpovídající výraz</th></tr>"; continue; }
+                if ($result) { echo "<tr><th colspan=100% class='suggest'>Mysleli jste některý z těchto výrazů?</th></tr>"; }
+                else { echo "<tr><th colspan=100% class='error'>Nebyl nalezen žádný odpovídající výraz</th></tr>"; continue; }
             }
-            catch(\PDOException $e) { echo "<tr class='output'><th colspan=4>Chyba při hledání v odstavci</th></tr>"; continue;
+            catch(\PDOException $e) { echo "<tr class='output'><th colspan=100%>Chyba při hledání v odstavci</th></tr>"; continue;
 
             }
         }
@@ -39,11 +33,12 @@ foreach ($_GET['rng'] as $g) {
         }
         echo "</tr>";
 
+        $trim_v = trim($v,"\% \t\n\r\0\x0B");
         foreach ($result as $r) {
             echo "<tr>";
             $array_values = array_values($r);
             for ($j = 0; $j < count($array_values); $j++) {
-                if ($array_keys[$j] === $data1[$g]) $array_values[$j] = str_replace($v,"<b>$v</b>",$array_values[$j]);
+                if ($array_keys[$j] === $data1[$g]) $array_values[$j] = str_replace($trim_v,"<b>$trim_v</b>",$array_values[$j]);
                 echo "<td>$array_values[$j]</td>";
             }
             echo "</tr>";
@@ -52,28 +47,5 @@ foreach ($_GET['rng'] as $g) {
 }
 
 
-
-function explodeKeywords($keywords) {
-    $values = array();
-    $value = "";
-    $flag = false;
-    for ($i = 0; $i < strlen($keywords); $i++) {
-        if ($keywords[$i] === " " && !$flag) {
-            if (!empty($value)) $values[] = $value;
-            $value = "";
-        }
-        else if ($keywords[$i] === "'") {$value .= "\'";}
-        else if (preg_match("/[\"«»„“]/", $keywords[$i])) {
-            if (!$flag) { $flag = true; continue; }
-            $flag = false;
-            if (!empty($value)) $values[] = $value;
-            $value = "";
-        }
-        else $value .= $keywords[$i];
-
-    }
-    if (!empty($value)) { $values[] = $value; }
-    return $values;
-}
 ?>
 </table>

@@ -1,5 +1,0 @@
-This will include instructions on how to setup the
-Etymology and Translation website on the server.
-
-select @@datadir;
-SHOW VARIABLES LIKE "secure_file_priv";

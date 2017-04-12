@@ -1,0 +1,10 @@
+This will include instructions on how to setup the
+Etymology and Translation website on the server.
+
+select @@datadir;
+SHOW VARIABLES LIKE "secure_file_priv";
+
+ALTER TABLE english ADD id_cs INT;
+ALTER TABLE english ADD FOREIGN KEY (`id_cs`) REFERENCES cestina(`id_cs`);
+UPDATE english INNER JOIN cestina ON cestina.slovo = english.czech SET english.id_cs = cestina.id_cs;
+SELECT slovo FROM english JOIN cestina ON english.id_cs = cestina.id_cs;

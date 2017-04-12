@@ -8,17 +8,12 @@ $dbini = parse_ini_file('.htcredentials.ini');
    define("dbname", $dbini["dbname"]);
 $conn = new DBconn(dbhost, dbuser, dbpass, dbname);
 
-function getDictionariesTitleAndCode() {
-    global $conn;
-    $sql = "SELECT title, code FROM dictionaries_list";
-    $result = Array();
-    $rows = $conn->queryAll($sql);
-    for ($i = 0; $i < $conn->queryCount($sql); $i++) {
-        $result += [$rows[$i]['title'] => $rows[$i]['code']];
-    }
-    return $result;
+$result = array();
+$linguis = getDictionariesList("title, code");
+for ($i = 0; $i < count($linguis); $i++) {
+    $result += [$linguis[$i]['title'] => $linguis[$i]['code']];
 }
-$linguis = getDictionariesTitleAndCode();
+$linguis = $result;
 
 //form handler
 $POST_RESULTS = false;
@@ -30,9 +25,9 @@ if (isset($_GET['sent'])) {
         $langErr = "Vyberte aspoň jeden jazyk";
     } else {
         $tables = array();
-        for ($i = 0; $i < count($_GET["lang"]); $i++) {
-            $lang = test_input($_GET["lang"][$i]);
-            if (!array_search($_GET['lang'][0], $linguis)) {
+        foreach ($_GET["lang"] as $i) {
+            $lang = test_input($i);
+            if (!array_search($i, $linguis)) {
                 $langErr = "Neplatný vstup";
                 break;
             }
@@ -45,7 +40,7 @@ if (isset($_GET['sent'])) {
     } else {
         $keywords = test_input($_GET["keywords"]);
         // check if input has only language characters, \pL is a Unicode category
-        if (!preg_match("/^[\s,.'&quot;:«»„“\-\pL]+$/u", $keywords)) {
+        if (!preg_match("/^[\s,.'%*&quot;:«»„“\-\pL]+$/u", $keywords)) {
           $keywordsErr = "Pouze významové znaky jsou povolené";
         }
     }
@@ -59,14 +54,12 @@ if (isset($_GET['sent'])) {
     }
 
 }
-
 function test_input($data) {
   $data = trim($data);
   $data = stripslashes($data);
   $data = htmlspecialchars($data);
   return $data;
 }
-
 
 //set data (temporary)
 $cs = array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior");
@@ -84,9 +77,10 @@ if(isset($_GET['lang']) && array_search($_GET['lang'][0], $linguis)) {
     $result = $conn->queryOne($sql);
     $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='dictionaries' AND `TABLE_NAME`='$result[table]'";
     $data1 = $conn->queryAll($sql);
+    $data1 = array_column($data1, 'COLUMN_NAME');
     $result = Array();
-    for ($i = 1; $i < $conn->queryCount($sql); $i++) {
-        $result[] = $data1[$i]['COLUMN_NAME'];
+    foreach ($data1 as $d) {
+        if (strncmp($d, "id", 2) !== 0) $result[] = $d;
     }
     $data1 = $result;
 }
@@ -130,6 +124,7 @@ function createCheckboxField($title, $root, $data) {
     }
     echo '</tr>';
 }
+
 ?>
 
 <form method="get" id="srchform" action="<?php  echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
