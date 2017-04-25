@@ -1,22 +1,17 @@
 ﻿<script src=queryChanger.js></script>
 <script src=jquery-1.10.2.min.js></script>
 <script src=URI.min.js></script>
-
-<?php
-include('class.php/DBconn.class.php');
-include('class.php/SelectOptions.class.php');
-?>
-
 <link rel="stylesheet" href="EATWstyle.css">
-
 <div id="menu-box">
 <ul id="menu" class="clearfix">
   <li class="first"><a href="../index.php">Úvod</a></li>
   <li><a class="active" href="EATW/EATW.php">Slovník</a></li>
-  <li><a href="#">Návod k použití</a></li>
+  <li><a href="../userguide.html">Návod k použití</a></li>
 </ul>
 </div>
-
+<?php
+require_once('class.php/DBconn.class.php');
+require_once('class.php/SelectOptions.class.php'); ?>
 <div class='gui'>
     <div class='form'>
     <?php require_once('form.php'); /* asks for $POST_RESULTS and $_GET['lang[]', 'keywords', 'rng[]', 'cat[]'] */ ?>

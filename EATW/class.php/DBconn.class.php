@@ -1,5 +1,4 @@
 ﻿<?php
-
 class DBconn{
     private $conn;
 
@@ -35,8 +34,4 @@ class DBconn{
     }
 
 }
-
-
-
-
 ?>
