@@ -1,10 +1,98 @@
-This will include instructions on how to setup the
-Etymology and Translation website on the server.
+Etymological dictionary and a basic translator
+==============================================
+Hello, this short guide will teel you how to operate this applicaton.
+Requirements
+------------
+This application was written fro Apache server and MySQL database.
+I have not tested it elsewhere so I do not guarantee it working.
+You also need to have PHP on your server, with
+"extension=php_pdo_mysql.dll" uncommented in your php.ini file.
 
-select @@datadir;
-SHOW VARIABLES LIKE "secure_file_priv";
+Database access
+---------------
+Open EATW/.htcredentials_default.ini
+Fill in the required info, the rename the file to
+.htcredentials.ini
+
+Database
+--------
+Defaultly, the database is called `dictionaries`. I have not added an
+easy way to change it, so I recommend keeping the name.
+You can utilise the 'dictionaries_setup.sql' file to help you setup
+more easily. Use this command:
+
+mysql -p dictionaries < dictionaries_setup.sql;
+
+In case it doesn't work, please add its content manually.
+
+Tables
+------
+Find inserter.php in EATW/SQL/
+open the DATA folder
+open dictionaries_list.csv in excel or a text editor
+each row includes:
+
+iddictionaries_list - dictionary id, has to be a number
+table - the name of the table with the dictionary in database
+title - the title of the dictionary shown to users
+code - few letters representing the dictionary
+translate - the column of the table where the words are stored
+csv - the source file - please use csv with ; as separators
+
+DO NOT use diacritics in the 'table' and 'code' columns
+Place the .csv files in the DATA folder
+
+Once you have filled in the table, run the inserter.php
+enter your username and password let it run. Check afterwards
+if it had been successful.
+
+Joining tables
+--------------
+You need to do this manually, I have placed the necessary steps below
+Let's say we want to connect the 'english' table with the 'cestina' table
+The first requirement is that they have some common values
+
+This is the template:
+
+ALTER TABLE @table1 ADD id_@table2.code INT;
+ALTER TABLE @table1 ADD FOREIGN KEY (`id_@table2.code`) 
+	REFERENCES @table2(`id_@table2.code`);
+UPDATE @table1 INNER JOIN @table2 ON @table2.translate = @table1.withValuesFromTable2Translate 
+	SET @table1.id_@table2.code = @table2.id_@table2.code;
+
+Real example:
 
 ALTER TABLE english ADD id_cs INT;
-ALTER TABLE english ADD FOREIGN KEY (`id_cs`) REFERENCES cestina(`id_cs`);
-UPDATE english INNER JOIN cestina ON cestina.slovo = english.czech SET english.id_cs = cestina.id_cs;
-SELECT slovo FROM english JOIN cestina ON english.id_cs = cestina.id_cs;
+ALTER TABLE english ADD FOREIGN KEY (`id_cs`) 
+	REFERENCES cestina(`id_cs`);
+UPDATE english INNER JOIN cestina ON cestina.slovo = english.czech 
+	SET english.id_cs = cestina.id_cs;
+
+CODE STRUCTURE
+==============
+website:
+	index.php
+	userguide.html
+	style.css
+application
+	EATW/EATW.php
+		class.php
+			DBconn.class.php - mysql connection
+			SelectOptions.class.php - creates the dictionary selects
+		SQL
+			dictionaries_setup.sql - creates the `dictionaries_list` table and th levenshtenlim() function
+			levenshteinlim.sql - solely the levenshteinlim() function, meant for demonstration
+			inserter.php - pushes the csv files from DATA into tables based on `dictionaries_list` table
+				DATA	- includes csv files
+					...
+					...
+		EATWstyle.css
+		form.php - gets user input, includes form handler
+		search_output.php - creates the search results below the form
+		translate_ouput.php - translates in the textares on the right
+		queryChanger.js - my custom library, extension of URI.js
+		libraries (URI.min.js, jquery-3.1.1.min.js)
+		.htcredentials.ini - a file to store secret database access info
+		
+
+			

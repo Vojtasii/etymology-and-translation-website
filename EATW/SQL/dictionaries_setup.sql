@@ -28,7 +28,7 @@ CREATE TABLE `dictionaries_list` (
   `title` text,
   `code` text,
   `translate` text,
-  `csv` text,
+  `csv` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -36,6 +36,8 @@ CREATE TABLE `dictionaries_list` (
 -- function levenshteinlim
 -- -----------------------------------------------------
 
+USE `dictionaries`;
+DROP FUNCTION IF EXISTS levenshteinlim;
 DELIMITER $$
 USE `dictionaries`$$
 CREATE FUNCTION levenshteinlim( s1 VARCHAR(255), s2 VARCHAR(255), n INT)

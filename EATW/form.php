@@ -61,17 +61,17 @@ function test_input($data) {
 }
 
 //set data (temporary)
-$cs = array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior");
+/*$cs = array("Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Lorem", "Ipsum", "Dolor", "Sit", "Amet", "et", "Maior");
 $fr = array("Ipsum", "Dolor", "Sit", "Amet", "et", "Maior", "Deum");
 $lt = array("Dolor", "Sit", "Amet", "et", "Maior", "Deum", "Gloriam");
 $en = array("Sit", "Amet", "et", "Maior", "Deum", "Gloriam", "Dolor");
 $sk = array("Amet", "et", "Maior", "Deum", "Gloriam", "Dolor", "Sit");
 $sl = array("et", "Maior", "Deum", "Gloriam", "Dolor", "Sit", "Amet");
-$tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl);
+$tempdata = array("cs" => $cs,"fr" => $fr,"lt" => $lt,"en" => $en,"sk" => $sk,"sl" => $sl); */
 
 
 if(isset($_GET['lang']) && array_search($_GET['lang'][0], $linguis)) {
-    $data2 = $tempdata[$_GET['lang'][0]];
+    $data2 = false;//$data2 = $tempdata[$_GET['lang'][0]];
     $sql = "SELECT `table` FROM dictionaries_list WHERE code='" . $_GET['lang'][0] . "'";
     $result = $conn->queryOne($sql);
     $sql = "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='dictionaries' AND `TABLE_NAME`='$result[table]'";
