@@ -46,10 +46,11 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `dictionaries`.`français`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dictionaries`.`français` (
+CREATE TABLE IF NOT EXISTS `dictionaries`.`francais` (
   `id_fr` INT(11) NOT NULL AUTO_INCREMENT,
   `Mot` VARCHAR(45) NULL DEFAULT NULL,
   `Etymologie` MEDIUMTEXT NULL DEFAULT NULL,
+  `Anglais` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id_fr`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -94,12 +95,12 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 -- Table `dictionaries`.`čeština`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dictionaries`.`čeština` (
+CREATE TABLE IF NOT EXISTS `dictionaries`.`cestina` (
   `id_cs` INT(11) NOT NULL AUTO_INCREMENT,
   `Slovo` VARCHAR(45) NULL DEFAULT NULL,
   `Etymologie` MEDIUMTEXT NULL DEFAULT NULL,
   `Anglictina` VARCHAR(45) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_cz`))
+  PRIMARY KEY (`id_cs`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 

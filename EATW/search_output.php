@@ -7,12 +7,12 @@ foreach ($_GET['rng'] as $g) {
         $result = $conn->queryAll($sql);
 
         if (!$result) {
-            $sql = "SELECT * FROM $table WHERE " . $data1[$g] . " LIKE '$v'";
+            $sql = "SELECT * FROM $table WHERE " . $data1[$g] . " COLLATE UTF8_GENERAL_CI LIKE '$v'";
             $result = $conn->queryAll($sql);
         }
 
         if (!$result) {
-            $lim = round(strlen($v) / 2);
+            $lim = round(strlen($v) / 2) + 1;
             $sql = "SELECT * FROM $table
                     WHERE (@lvdistance:= levenshteinlim('$v'," . $data1[$g] . ", $lim)) < $lim
                     ORDER BY @lvdistance LIMIT 8";

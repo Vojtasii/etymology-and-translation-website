@@ -8,7 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
        define("dbname", $dbini["dbname"]);
     $conn = new DBconn(dbhost, dbuser, dbpass, dbname);
 
-
+    $sql = "TRUNCATE TABLE `dictionaries_list`";
+    $conn->query($sql);
     $data = csv_values("DATA/dictionaries_list.csv");
     insert_csv_into_db($data, "dictionaries_list");
 
@@ -18,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //print_r($result);
     $table = array_column($result, 'table');
     $csv = array_column($result, 'csv');
-    print_r($csv);
-    print_r($table);
+    /*print_r($csv);
+    print_r($table);*/
     for ($i = 0; $i < count($csv); $i++) {
         if (!empty($csv[$i])) {
             insert_csv_into_db(csv_values("DATA/".$csv[$i]), $table[$i]);
@@ -49,6 +50,8 @@ function insert_csv_into_db ($data, $table) {
     global $conn;
     /*$sql = "TRUNCATE TABLE `$table`";
     $conn->query($sql);*/
+    $sql = "CREATE TABLE IF NOT EXISTS `$table`";
+    $conn->query($sql);
     $sql = "LOCK TABLES `$table` WRITE";
     $conn->query($sql); //($data[columns])
     $sql = "INSERT INTO `$table`
